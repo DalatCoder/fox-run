@@ -2,6 +2,9 @@
 
 Phiên bản Unity: 2019
 
+Đôi lúc, việc cải thiện game không nằm ở việc `code` mà nằm ở những cấu hình từng rất nhiều
+`component` khác nhau.
+
 ## 1. Adding Player
 
 Mở thư mục Assets/2D Platformer/ Graphics/Player
@@ -277,3 +280,112 @@ chọn mũi tên phải để đi tiếp thì khi nhảy, nhân vật sẽ bị 
   - Tại `component capsule collider`, kéo cái `physic` mới này vào để thay thế cái mặc định.
 
 ![Improving](md_assets/improving.png)
+
+Đôi lúc, việc cải thiện game không nằm ở việc `code` mà nằm ở những cấu hình từng rất nhiều
+`component` khác nhau.
+
+### 1.8. Stop Unlimited Jumping
+
+Tạo 1 biến `boolean` lưu trữ trạng thái, nếu nhân vật đang đứng tại mặt đất thì cho
+phép nhảy. Nếu nhân vật đang đứng trên không trung thì không cho phép nhảy.
+
+Cần phải xác định được trạng thái liệu nhân vật có đang đứng trên mặt đất hay không?
+
+Ý tưởng:
+
+- Tạo 1 điểm ở chân của nhân vật
+- Từ điêm này vẽ ra 1 vòng tròn nhỏ
+- Trong phạm vi của vòng tròn này, nếu gặp đối tượng mặt đất thì => nhân vật đang đứng trên mặt đất
+
+Làm sao để xác định đâu là mặt đất ???
+
+Dựa vào `layer` (`unity layer system`).
+
+#### 1.8.1. Unity Layer System
+
+- Chọn đối tượng `simple_setup_level`, tại selectbox `layer`, bấm vào add new để
+thêm mới 1 số layer, trước mắt sẽ thêm 2 layer:
+
+  - `Ground`: những `game object` thuộc `layer` này sẽ tương ứng với phần đất
+  - `Player`: những `game object` thuộc `layer` này sẽ tương ứng với người dùng
+
+- Sau khi tạo xong `layer`, chọn `layer` cho `simple_setup_layer` là `Ground`
+- Chọn `layer` cho `Player` là `Player`.
+
+![Layer system](md_assets/layersystem.png)
+
+#### 1.8.2. Xác định trạng thái nhân vật đang đứng trên mặt đất
+
+Tạo biến `bool` lưu trạng thái liệu người dùng có đang đứng trên mặt đất hay không
+
+```csharp
+  private bool isGrounded;
+```
+
+Chỉ cho phép nhảy lên khi trạng thái `isGrounded` = `true`, tức là người dùng đang đứng
+trên mặt đất
+
+```csharp
+  void Update()
+  {
+      theBD.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), theBD.velocity.y);
+
+      if (Input.GetButtonDown("Jump"))
+      {
+        if (isGrounded)
+        {
+          theBD.velocity = new Vector2(theBD.velocity.x, jumpForce);
+        }
+      }
+  }
+```
+
+Xác định xem người dùng có đang đứng trên mặt đất hay không?
+
+- Tạo 1 điểm ở dưới chân của người dùng (`add game object to Player`)
+- Vẽ 1 vòng tròn nhỏ có bán kính `0.2f`
+- Nếu trong bán kính của vòng tròn này có sự xuất hiện của 1 vật thể thuộc layer `Ground`
+tức là người dùng đang đứng trên mặt đất
+
+![Ground point](md_assets/groundpoint.png)
+
+Gán `Ground Point` object vào `script` để xử lý va chạm, có 2 cách:
+
+- 1. gán như là 1 `game object`
+- 2. bởi vì mình chỉ muốn biến vị trí hiện tại của đối tượng để xác định va chạm, do đó chỉ cần truyền đối tượng `Transform`
+
+Dùng cách 2, tạo 1 biến để lưu trữ đối tượng `Transform`, đối tượng này chứa vị trí của điểm dưới chân nhân vật `Ground Point`
+
+```csharp
+  public Transform groundCheckPoint;
+```
+
+Tạo 1 biến tiếp theo để lưu trữ `layer`, biến này chỉ ra rằng hiện tại `layer` mặt đất là layer nào
+
+```csharp
+  public LayerMask whatIsGround;
+```
+
+Tại mỗi lần `update`, ta kiểm tra xem vòng tròn dưới chân nhân vật có tiếp xúc với bất kì đối tượng
+nào thuộc layer `Ground` hay không
+
+```csharp
+  void Update()
+  {
+      theBD.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), theBD.velocity.y);
+
+      isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, .2f, whatIsGround);
+
+      if (Input.GetButtonDown("Jump"))
+      {
+          if (isGrounded)
+          {
+              theBD.velocity = new Vector2(theBD.velocity.x, jumpForce);
+          }
+      }
+  }
+```
+
+Result
+
+![Result](md_assets/stopunlimitedjumping.png)
