@@ -389,3 +389,32 @@ nào thuộc layer `Ground` hay không
 Result
 
 ![Result](md_assets/stopunlimitedjumping.png)
+
+### 1.9. Adding double jump
+
+```csharp
+void Update()
+{
+    theBD.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), theBD.velocity.y);
+
+    isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, .2f, whatIsGround);
+
+    if (isGrounded) canDoubleJump = true;
+
+    if (Input.GetButtonDown("Jump"))
+    {
+        if (isGrounded)
+        {
+            theBD.velocity = new Vector2(theBD.velocity.x, jumpForce);
+        }
+        else
+        {
+            if (canDoubleJump)
+            {
+                theBD.velocity = new Vector2(theBD.velocity.x, jumpForce);
+                canDoubleJump = false;
+            }
+        }
+    }
+}
+```
