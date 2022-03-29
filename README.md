@@ -511,3 +511,42 @@ void update()
     animator.SetBool("isGrounded", isGrounded);
 }
 ```
+
+### 1.13. Changing direction
+
+Hiện tại hiệu ứng đã có, tuy nhiên khi đi lùi, nhân vật không xoay mặt về phía sau.
+
+Trên `component` `Sprite Renderrer` có 1 thuộc tính là `Flip`, ta có thể lật 1 `sprite` hình
+thông qua 2 trục `X` và `Y`. Trong đó, việc lật trục `X` đáp ứng được yêu cầu xoay mặt nhân
+vật sang trái và phải. Do đó, giờ ta sẽ tìm cách để tham chiếu đến `component` này trong `script`.
+
+Làm tương tự như `animator`, khai báo 1 biến `private` giữ tham chiếu, sau đó gọi hàm trong `start`
+để hệ thống tự động tìm và gán đối tượng `Sprite Renderrer` đang gắn với `Player game object` hiện tại
+
+```csharp
+public class PlayerController : MonoBehaviour
+{
+    private Animator animator;
+    private SpriteRenderer theSR;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+        theSR = GetComponent<SpriteRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        theBD.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), theBD.velocity.y);
+
+        // ...
+
+        if (theBD.velocity.x < 0) theSR.flipX = true;
+        else if (theBD.velocity.x > 0) theSR.flipX = false;
+
+        // ...
+    }
+}
+```
