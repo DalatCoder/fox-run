@@ -221,3 +221,31 @@ bằng với giá trị tại biến `moveSpeed`, còn giá trị trục `y` gi�
 - Nếu để nguyên thì mang giá trị 0
 
 Để tìm hiểu thêm về các giá trị `Input` này, vào Menu `Edit` > `Project Settings` > `Input Manager`.
+
+### 1.6. Jumping
+
+- Lắng nghe sự kiện người dùng bấm vào nút `space` trong phương thức `update`.
+- Tăng giá trị trục `y`, giữ nguyên giá trị trục `x`
+- Nhân vật nhảy lên cao, sau đó dựa vào trọng lực để rơi xuống
+- Thay đổi độ lớn của trọng lực tác dụng lên nhân vật tại `Rigidbody2D component`: `Gravity Scale`
+- Tạo biến `public float jumpForce` để đặt độ cao khi nhân vật nhảy
+
+- `gravity scale` tăng lên nghĩa là nhân vật nặng hơn, `jump force` cũng tăng theo
+- `GetButtonDown` diễn ra khi người dùng vừa nhấn vào 1 nút
+- `GetButton` diễn ra khi người dùng nhấn nút hoặc giữ nút
+- `GetButtonUp` diễn ra khi người dùng thả nút vừa nhấn
+- `Jump` là 1 giá trị trong `Input system`, vào `Input Manager` để xem chi tiết
+
+```csharp
+    void Update()
+    {
+        theBD.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), theBD.velocity.y);
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            theBD.velocity = new Vector2(theBD.velocity.x, jumpForce);
+        }
+    }
+```
+
+![Jump](md_assets/jummp.png)
