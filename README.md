@@ -418,3 +418,18 @@ void Update()
     }
 }
 ```
+
+### 1.10. Animating the Player
+
+- Tạo thư mục `assets/Animations/Player` để lưu trữ các hiệu ứng hoạt họa liên quan
+đến `Player`
+- Tại khung `game object`, chọn đối tượng `Player`
+- Vào menu `Window`, chọn `Animation` > `Animation` rồi kéo cửa sổ này nằm cạnh
+cửa sổ `Game` để thuận tiện
+- Đảm bảo chọn vào đối tượng `Player` trên khung `game object`, sau đó nhấn `Create` để thêm
+mới và lưu tập tin vào đúng thư mục trong `assets/Animations`, đặt tên `Player_Idle`
+- Vào thư mục `assets/2D Platformer Assets/Graphics/Player` rồi tìm đến `Player Idle Sprite` đã cắt lúc trước,
+kéo từng hình vào từng mốc thời gian theo thứ tự `1, 2, 3, 4`
+- Để hiệu ứng chuyển động mượt thì nhớ lặp lại tấm hình số 1, lúc này thứ tự sẽ là: `1, 2, 3, 4, 1`
+
+![Animation](md_assets/animatingplayer.png)
