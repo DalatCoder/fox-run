@@ -113,3 +113,16 @@ sát `collider` vào nhân vật.
 	lăn ra đất
 	- Trong game này, chúng ta không muốn yếu tố vật lý này diễn ra
 	- Chọn phần `rigidbody`, kéo xuống phần `constraints`, tick vào `freeze rotation` (khóa xoay)
+
+### 1.4. Moving Player around with some Scripts
+
+Nhấn vào `assets`, tạo folder mới `scripts` để lưu trữ toàn bộ
+`scripts`.
+
+1 số quy ước đặt tên `script` thông dụng
+
+- Bắt đầu với chữ in hoa
+- Không có dấu gạch ngang ở giữa
+- Không được đổi tên `script` sau khi đã gán cho `game object`
+
+Ví dụ, ta tạo 1 script cho đối tượng `Player`, đặt tên là: `PlayerController`
