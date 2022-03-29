@@ -433,3 +433,39 @@ kéo từng hình vào từng mốc thời gian theo thứ tự `1, 2, 3, 4`
 - Để hiệu ứng chuyển động mượt thì nhớ lặp lại tấm hình số 1, lúc này thứ tự sẽ là: `1, 2, 3, 4, 1`
 
 ![Animation](md_assets/animatingplayer.png)
+
+### 1.11. Switching Animations
+
+Hiện tại trong game đang có 3 hiệu ứng hoạt họa dành cho `Player`
+
+- `Player_Idle`: hoạt họa khi `Player` đứng yên trên mặt đất
+- `Player_Run`: hoạt họa khi `Player` di chuyển sang trái hoặc phải (`moveSpeed` > 0)
+- `Player_Jump`: hoạt họa khi `Player` nhảy lên không trung (`isGrounded` = false)
+
+Chúng ta cần xác định và cấu hình việc chuyển cảnh các hoạt họa
+
+- Vào menu `Windows` > `Animation` > `Animator`
+  
+  ![Switching animation](md_assets/animationswitch1.png)
+
+- Chuột phải lên `animation` `Player_Idle`, chọn `Make transition`, sau đó kéo tới đối tượng `Player_Run`
+để cấu hình hiệu ứng chuyển cảnh giữa 2 `animation` này
+
+  - Chọn lên mũi tên vừa được tạo ra để tiến hành cấu hình
+  - Chúng ta muốn hiệu ứng chuyển cảnh diễn ra ngay lập tức, do đó, đặt giá trị tại `transition duration` về `0`
+  - Mặc định, `exit time` xác định thời gian 1 `animation` kết thúc và tự động chuyển sang `animation` khác. Tuy nhiên, trong
+  trường hợp này, ta muốn chuyển cảnh `animation` trong 1 số điều kiện nhất định, do đó tiến hành bỏ tick tại ô `has exit time`.
+  Tại thời điểm này `animation` `Player_Idle` sẽ diễn ra mãi mãi, vì vậy ta cần xác định điều kiện để chuyển cảnh sang `animation` `Player_Run`.
+  - Khi người dùng di chuyển qua trái hoặc phải (`moveSpeed` > 0), lúc này người dùng đang chạy nên ta chuyển cảnh từ `Player_Idle` sang
+  `Player_Run`. Chọn tab `Parameters`, tiến hành khai báo 1 biến lưu giá trị `moveSpeed`, đặt cùng tên `moveSpeed`.
+  - Quay lại chọn vào mũi tên, kéo xuống dưới, tại mục `List conditions`, tiến hành thêm 1 điều kiện để kiểm tra `moveSpeed`.
+  - Theo chiều từ `Player_Idle` sang `Player_Run`, `moveSpeed` sẽ có giá trị lớn hơn `0.1`
+  - Theo chiều từ `Player_Run` sang `Player_Idle`, `moveSpeed` sẽ có giá trị nhỏ hơn `0.1`
+
+- Tương tự, khi chuyển từ `Player_Idle` sang `Player_Jump`, ta đặt điều kiện tham số `isGrounded` = `false`
+- Khi chuyển từ `Player_Jump` sang `Player_Idle`, ta đặt điều kiện tham số `isGrounded` = `true`
+
+- Khi nhân vật đang chạy, có thể chuyển sang trạng thái nhảy, do đó ta chuyển từ `Player_Run` sang `Player_Jump`
+với điều kiện `isGrounded` = `false`
+
+![Animator](md_assets/animator.png)
