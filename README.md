@@ -39,6 +39,28 @@ Trong này ta sẽ thấy được 1 số sprite về nhân vật cáo.
 
 ![Done](md_assets/done.png)
 
+### 1.2. Sorting Sprites with Layers
 
+1 điều quan trọng là phải đảm bảo được player ở đúng layer.
 
+Sử dụng `sorting layer system` có sẵn trong `unity` để đảm bảo 
+vị trí của `player` với các `background layer` còn lại.
 
+Chọn vào `Player object`, tại menu `layer`, chọn `add sorting layer`.
+
+- `BG`: background
+- `World`: quang cảnh thế giới
+- `Player`: người chơi
+
+Ta sẽ thêm vào các layer khác khi tiếp tục phát triển dự án
+
+![Sorting Layer](md_assets/sortinglayer.png)
+
+- Đặt layer của `back`, `middle` thành `BG`
+- Đặt layer của `simple_setup_level` thành `World`
+- Đặt layer của `Player` thành `Player`
+
+Các `game object` được thêm vào sau sẽ mặc định layer `default`, đều
+xếp trên `BG` và `Wolrd`
+
+![Set layer](md_assets/setlayer.png)
