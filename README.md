@@ -64,3 +64,52 @@ Các `game object` được thêm vào sau sẽ mặc định layer `default`, �
 xếp trên `BG` và `Wolrd`
 
 ![Set layer](md_assets/setlayer.png)
+
+### 1.3. Giving player physics
+
+- Chọn `Player` game object
+- `Add Component`
+- Bọc 1 lớp `Rigidbody 2D`
+
+![Rigidbody](md_assets/rigidbody.png)
+
+`Rigidbody 2D` sẽ cung cấp 1 số yếu tố vật lý được cung cấp sẵn 
+bởi hệ thống vật lý. Dùng cái này sẽ thuận tiện và dễ dàng hơn
+so với việc tự tính toán các công thức vật lý.
+
+Kéo con cáo đưa lên cao, sau đó nhấn vào `Play`, con cáo sẽ tự rơi xuống
+do tác động của trọng lực
+
+![Trong luc](md_assets/trongluc.png)
+
+Con cáo rớt khỏi màn hình
+
+Để con cáo có thể chạm vào mặt đất (tương tác với các game object khác), ta cần thêm vào 1 số tác động vật lý lên cơ thể thật (`solid body physics`)
+
+- Chọn `Player` game object
+- `Add Component`
+- Chọn thư mục `Physics 2D`, chọn 1 trong các `collider` ở đây.
+	
+	- Thông thường, khi chúng ta tạo ra nhân vật, chúng ta thường 
+	dùng `box collider` hoặc `capsule collider`. 
+	- Trong trường hợp này, ta sẽ dùng `capsule collider` cho con cáo
+	- Bởi vì dùng `box collider` thì nó hơi bự 1 tí so với con cáo
+
+	![Capsule collider](md_assets/capsulecollider.png)
+
+- Vòng tròn mặc định của `capsule collider` hơi to, ta cấu hình để bóp
+sát `collider` vào nhân vật.
+
+	- Chọn `component capsule collider` vừa tạo
+	- Chọn `edit collider`
+	- Kéo các góc sao cho vòng `collider` bao phủ phần thân của con cáo (không cần bao phủ hết)
+	- Lúc này, khi thả xuống, nhân vật đã đứng trên mặt đất
+
+	![Dung tren mat dat](md_assets/dungtrenmatdat.png) 
+
+- Vấn đề nhân vật ngã lăn ra đất
+
+	- Khi nhân vật rớt từ trên xuống, chạm vào góc của bức tường, nó ngã
+	lăn ra đất
+	- Trong game này, chúng ta không muốn yếu tố vật lý này diễn ra
+	- Chọn phần `rigidbody`, kéo xuống phần `constraints`, tick vào `freeze rotation` (khóa xoay)
