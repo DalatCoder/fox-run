@@ -249,3 +249,31 @@ bằng với giá trị tại biến `moveSpeed`, còn giá trị trục `y` gi�
 ```
 
 ![Jump](md_assets/jummp.png)
+
+### 1.7. Improving Gameplay Feel
+
+- Khi nhảy lên rồi rớt xuống, 2 chân con cáo lún vào mặt đất, sau đó nó `reset` 2 chân lên mặt đất (cảm giác bị lag)
+
+  - Lý do: hệ thống vật lý được chạy mỗi lần hàm `update` được gọi (xem code)
+  - Trọng lực
+  - Mỗi `frame update`, nhân vật rớt xuống 1 tí
+  - Rớt 1 hồi thì nó nằm trong lòng đất
+  - Sau đó hệ thống check `oops`, chân nhân vật này không được nằm dưới mặt đất, do đó hệ thống tự set lại, đặt nhân
+ vật phía trên mặt đất
+- Cách sửa: vào `component Rigidbody2d`, đặt thuộc tính `Collision detection` thành `continous`: lúc này
+ mỗi lần `frame update`, hệ thống sẽ luôn check `collison` để đảm bảo rằng nhân vật không vô ý chui vào lòng đất
+
+- Khi nhân vật đi đến chỗ cái tường (cần phải nhảy lên để vượt qua), nếu như tiếp tục
+chọn mũi tên phải để đi tiếp thì khi nhảy, nhân vật sẽ bị dính vào bức tường.
+
+  - cách giải quyết: thêm 1 đối tượng gọi là `physical material`
+  - vào `assets` folder
+  - chuột phải chọn `create`
+  - `physics material 2D`, đặt tên là `Player Slippy`
+  - Đặt thuộc tính `Friction` từ 0.4 thành 0
+  
+  - Mặc định nhân vật sẽ có 1 cái `physics material 2D` mang giá trị `Friction` là 0.4
+  dẫn đến việc bị bug như đã mô tả. Ta ghi đè cái `physic` này để không còn bug nữa.
+  - Tại `component capsule collider`, kéo cái `physic` mới này vào để thay thế cái mặc định.
+
+![Improving](md_assets/improving.png)
