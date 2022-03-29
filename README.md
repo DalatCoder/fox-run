@@ -469,3 +469,45 @@ Chúng ta cần xác định và cấu hình việc chuyển cảnh các hoạt 
 với điều kiện `isGrounded` = `false`
 
 ![Animator](md_assets/animator.png)
+
+### 1.12. Controlling the Animator through code
+
+Tạo 1 tham chiếu đến đối tượng `Animator` để kiểm soát đối tượng này thông qua `code`.
+
+Thay vì tạo 1 tham chiếu `public` rồi kéo đối tượng tương ứng vào. Ta có thể khai báo
+1 tham chiếu `private`, sau đó, trong hàm `start`, ta tiến hành gọi hàm tương ứng để lấy
+được đối tượng tương ứng đang được gắn vào `game object` hiện hành.
+
+```csharp
+  void Start()
+  {
+      animator = GetComponent<Animator>();
+  }
+```
+
+Sau này, khi có nhiều `game object` `Player`, ta không cần phải đi gán thủ công `animator` cho
+từng cái nữa.
+
+Chuyển sang giao diện `debug` để xem rõ hơn.
+
+Tại phần dưới cùng của hàm `update`, ta tiến hành viết code để kiểm soát đối tượng `animator` này.
+
+Tại đây, ta dùng hàm `Set` trên đối tượng `animator` để đặt giá trị tương ứng cho các tham số
+đã được khai báo trong cửa sổ `Animator` trước đó, bao gồm:
+
+- `moveSpeed`: dùng làm điều kiện xác định việc chuyển cảnh từ `Player_Idle` sang `Player_Run`
+- `isGrounded`: dùng làm điều kiện xác định việc chuyển cảnh từ `Player_Idle` sang `Player_Jump` và `Player_Run` sang `Player_Jump`
+
+```csharp
+void update()
+{
+    theBD.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), theBD.velocity.y);
+
+    isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, .2f, whatIsGround);
+
+    // ...
+
+    animator.SetFloat("moveSpeed", Mathf.Abs(theBD.velocity.x));
+    animator.SetBool("isGrounded", isGrounded);
+}
+```

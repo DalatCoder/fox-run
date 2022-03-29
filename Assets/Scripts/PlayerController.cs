@@ -14,10 +14,12 @@ public class PlayerController : MonoBehaviour
 
     private bool canDoubleJump;
 
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -44,5 +46,8 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
+        animator.SetFloat("moveSpeed", Mathf.Abs(theBD.velocity.x));
+        animator.SetBool("isGrounded", isGrounded);
     }
 }
