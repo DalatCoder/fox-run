@@ -984,3 +984,48 @@ sẽ bị `deactive`, biến mất khỏi màn hình hiện tại.
 
 - `gameObject` tương tự như `transform`, được `inject` tự động vào `script` bởi `unity`
 - `gameObject` giống `this`
+
+### 4.3. Detecting Spikes Hitting The Player
+
+Khi `player` chạm vào `spike`, hàm `DealDamage` sẽ được gọi để trừ số `heart` của `player`.
+
+Ta tiến hành tạo 1 `script` mới, đặt tên `DamagePlayer` và gắn `script` này vào
+đối tượng `spikes_white`
+
+Đầu tiên, ta phải xác định được liệu `player` có đi vào vùng của `spikes` hay không (vùng được vẽ bởi `box collider 2d` lúc trước)
+
+- Tiến hành `override` phương thức `OnTriggerEnter2D` tại `DamagePlayer` `scrip`
+
+  ```csharp
+  private void OnTriggerEnter2D(Collider2D other)
+  {
+    Debug.Log("Enter collision area");
+  }
+  ```
+
+- Sử dụng `Debug.Log()` để hiển thị thông tin ra màn hình `console`
+
+Mặc định, trong lần đầu tiên chạy, màn hình `console` hiển thị ra `Enter collision area`. Lý do bởi vì
+đã có 1 cái `rigidbody2d` nào đó chạm vào cái `spikes` này. Đó chính là cái `ground`.
+
+Do đó, đầu tiên ta phải kiểm tra xem thứ chạm vào `spikes` có phải là `player` hay không, nếu không phải
+là `player` thì bỏ qua.
+
+Tham số truyền vào hàm là 1 biến thuộc kiểu `Collider2D`. Để xác định được đây là đối tượng nào,
+ta có thể dùng hệ thống tag (`tag system`) của `unity`.
+
+- Chọn đối tượng `player`, gắn `tag` giá trị `Player`.
+
+  ![Tag](md_assets/tag.png)
+
+- Kiểm tra nếu tham số `other` có `tag` là `Player`
+
+  ```csharp
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            Debug.Log("Enter collision area");
+        }
+    }
+  ```
