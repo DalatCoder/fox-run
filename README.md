@@ -1096,3 +1096,56 @@ Có 1 số cách để thực hiện việc này.
         }
     }
   ```
+
+### 4.5. Setting up Health UI
+
+Sau khi đã xong phần xác định va chạm và trừ `heart` nhân vật. Lúc này, ta cần có
+1 phương pháp nào đó để hiển thị số `heart` còn lại lên màn hình cho người chơi biết.
+
+Để hiển thị số `heart`, ta sẽ dùng hệ thống `canvas` có sẵn của `unity`.
+
+- Bấm chuột phải lên vùng `Hierarchy`
+- Chọn `UI` > `Canvas`
+- Nhấp đôi chuột lên cái `Canvas` này, ta sẽ thấy toàn bộ vùng vẽ
+- Đôi lúc, khung này sẽ bị ẩn, đây là tính năng ẩn hiện `layer` của `unity`, để xem chi tiết,
+ta chọn vào đối tượng `Canvas`, chọn `dropdown` `Layers` và bấm vào biểu tượng con mắt.
+
+![Canvas](md_assets/canvas.png)
+
+Khi tạo 1 `canvas` mới, hệ thống sẽ tự tạo kèm 1 cái `EventSystem`
+
+- Khi ta thêm 1 `button` vào `canvas`
+- Để truy cập đến `button` này, ta phải thông qua `EventSystem`
+
+Để tiện lợi trong việc tạo `prefab` cũng như tái sử dụng `canvas`, ta thường để `EventSystem` trở thành con của `Canvas`
+
+![Event System](md_assets/eventsystem.png)
+
+Lớp `canvas` vừa được tạo ra khá lớn, nó che hết phần màn hình thiết kế. Tuy nhiên, nó lại như 1 lớp phủ lên màn hình `in game` ở phía
+dưới.
+
+Đưa `heart` vào `canvas`
+
+- Chọn `heart sprite` tại `assets/2D Platformer Assets/Graphics/UI`
+- Kéo `heart` vào trở thành 1 con của `Canvas`, lúc này `heart` đã xuất hiện tại màn hình `in game`. Tuy nhiên, tại màn hinh `canvas`,
+`heart` lại quá nhỏ đến mức không thấy được.
+- Thay vào đó, chọn đối tượng `Canvas`, chuột phải, chọn `Create` > `Image` (đổi tên thành `Heart1`)
+- Kéo `sprite` `heart` vào thuộc tính `Source Image` của `Heart1`
+- Chọn `Set Native Size` để đặt đúng kích thước gốc của `sprite Heart`
+
+- Kéo `Heart` về góc và `duplicate` thêm 2 `Heart` nữa
+  ![Hearts](md_assets/hearts.png)
+
+Cấu hình `Heart` khi `unity` `scale` kích thước màn hình
+
+- Chọn cùng lúc 3 `Heart`, dùng công cụ `Anchor` để móc nó vào góc trên bên trái.
+
+  ![Anchor](md_assets/ancrhor.png)
+
+- `scale` kích thước của `Heart` khi kích thước màn hình thay đổi
+
+  - Chọn đối tượng `Canvas`
+  - Chọn thuộc tính `UI Scale Mode` thành `Scale With Screen Size`
+  - Đặt kích thước `Reference Resolution` thành `1920 x 1080` (ứng với kích thước màn hình `dev` hiện tại)
+
+  ![Scale](md_assets/scale.png)
