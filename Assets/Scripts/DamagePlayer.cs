@@ -20,7 +20,9 @@ public class DamagePlayer : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Enter collision area");
+            // Debug.Log("Enter collision area");
+
+            PlayerHealthController.instance.DealDamage();
         }
     }
 }

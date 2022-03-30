@@ -1029,3 +1029,70 @@ ta có thể dùng hệ thống tag (`tag system`) của `unity`.
         }
     }
   ```
+
+### 4.4. Damaging the Player
+
+Khi đã xác định được sự va chạm, giờ là lúc tắm máu người dùng
+
+Có 1 số cách để thực hiện việc này.
+
+- Khi va chạm xảy ra, ta tiến hành tìm kiếm `game object`, sao cho `game object` này chứa `script` `PlayerHealthController`
+
+  ```csharp
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+          var player = FindObjectOfType<PlayerHealthController>();
+          player.DealDamage();
+        }
+    }
+  ```
+
+- Tạo `singleton` cho `script` `PlayerHealthController`
+
+  ```csharp
+    public class PlayerHealthController : MonoBehaviour
+    {
+        public static PlayerHealthController instance;
+
+        public int currentHealth, maxHealth;
+
+        // Happens right before the Start() function
+        private void Awake()
+        {
+            instance = this;
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            currentHealth = maxHealth;
+        }
+
+        // Update is called once per frame
+        void Update() { }
+
+        public void DealDamage()
+        {
+            currentHealth -= 1;
+
+            if (currentHealth <= 0)
+            {
+                gameObject.SetActive(false);
+            }
+        }
+    }
+  ```
+
+  Truy cập trực tiếp đến `instance` và gọi hàm `DealDamage()`
+
+  ```csharp
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            PlayerHealthController.instance.DealDamage();
+        }
+    }
+  ```
