@@ -550,3 +550,59 @@ public class PlayerController : MonoBehaviour
     }
 }
 ```
+
+## 2. Camera
+
+### 2.1. Attach Camera to follow the Player
+
+Cách đơn giản nhất là kéo đối tượng `camera game object` vào đối tượng `Player game object` (để camera
+là đối tượng con thuộc player). Camera sẽ di chuyển theo nhân vật, thậm chí cả khi nhảy.
+
+Trong trò chơi này, ta không muốn điều đó diễn ra, vì vậy ta sẽ tạo `script` để điều khiển
+`camera` theo ý.
+
+- Vào folder `scripts`, tạo 1 script mới, đặt tên `CameraController`
+- Kéo `script` vừa tạo này vào `camera game object`
+
+Trong `script` này, ta cần phải tham chiếu đến 1 vật và `camera` sẽ di chuyển theo vật này.
+Trong trường hợp game này, ta cần tham chiếu đến đối tượng `Player` từ `CameraController script`.
+
+Tuy nhiên, để tái sử dụng `CameraController` này cho nhiều `game object` khác nhau, ta không nên gán
+cứng kiểu dữ liệu `Player game object` vào đây.
+Thay vào đó, chỉ cần giữ tham chiếu đến đối tượng `Transform` thuộc về `game object` là được.
+(`camera` sẽ di chuyển dựa vào vị trí này)
+
+Để di chuyển `camera`, ta cần chỉnh sửa vị trí `x, y, x` thuộc về thuộc tính `Transform` của
+đối tượng `camera`.
+Để tham chiếu đến đối tượng `Transform` của `camera`, ta chỉ cần gõ `transform` là xong. Bởi vì
+hệ thống `unity` đã tự `inject` đối tượng `transform` này vào `script`.
+
+Thay đổi vị trí hiện tại của `camera` thông qua việc đặt lại giá trị cho `transform.position`
+
+- `x`: di chuyển theo chiều ngang của `target` (trong trường hợp này sẽ là `x` của `Player`)
+- `y`: trong trường hợp này, ta không thay đổi `y`
+- `z`: chiều sâu của camera, trong trường hợp này ta cũng không đổi
+
+Sau đó quay lại giao diện `unity`, kéo đối tượng `Player game object` vào khung `Target` tại
+`camera` là được. Thuộc tính `transform` trên `Player` sẽ tự động được truyền vào.
+
+```csharp
+public class CameraController : MonoBehaviour
+{
+    public Transform target;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
+    }
+}
+```
+
+![CAmera](md_assets/camera.png)
