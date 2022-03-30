@@ -861,3 +861,62 @@ Vì vậy, ta cần phải tìm cách để bỏ hiệu ứng vật lý này.
 - Chọn `Body type` thành `Kinematic`
 
 ![Done](md_assets/tilemapdone.png)
+
+### 3.3. Moving Objects Between Levels with `Prefabs`
+
+Lúc này, ta đã có được 1 địa hình mới thông qua công cụ `Tilemap`.
+
+Tuy nhiên địa hình mới này hoàn toàn không có bất kỳ `Player`, `Background` hay `Middle` nào như màn hình
+trước.
+
+Ta có thể thêm thủ công các thứ này bằng tay, sau đó viết `script` và lặp lại 1 mớ logic đã viết trước.
+
+Thay vào đó, ta có thể dùng 1 thứ gọi là `Prefabs` có sẵn trong `unity` để chia sẽ những `game object` chung
+
+- Tạo thư mục `assets/Prefabs`
+- Thư mục này chứa các `game object` có thể tái sử dụng được (gọi là 1 `prefab`)
+
+### 3.3.1. Tạo các `game object` có thể tái sử dụng
+
+Để tạo các `prefab`
+
+- Quay lại `scene` hoàn chỉnh lúc đầu tại `assets/Scenes`
+- Vào cửa sổ `assets`, chọn `folder` `Prefabs` vừa tạo
+- Lần lượt kéo các `game object` cần tái sử dụng vào `folder` này, bao gồm:
+
+  - `Main Camera`: có gắn `script` điều khiển `camera` `CameraController`
+  - `Player`: nhân vật chính, có gắn `PlayerController` script
+  - `Background`: có ảnh biển và cây cối, làm nền cho `Level` (địa hình)
+
+![Prefab](md_assets/prefab.png)
+
+### 3.3.2. Lưu ý khi điều chỉnh thông số trên `prefab`
+
+Các `prefab` chứa trong thư mục `assets/Prefabs` là các `prefab` gốc.
+
+Các `prefab` được kéo từ thư mục `assets/Prefabs` vào các `scene` là các `prefab` sao chép.
+
+- Khi thay đổi thông số trên `prefab` gốc, tất cả `prefab` sao chép sẽ thay đổi theo
+- Khi thay đổi thông số trên `prefab` sao chép, thông số này chỉ ảnh hưởng đến `scene` hiện tại, không ảnh
+hưởng đến `prefab` gốc (trừ phi chọn `overrides` để lưu lại thay đổi)
+
+`Prefab` không thể lưu trữ tham chiếu đến các `game object`, do đó khi dùng lại cho các `scene`, ta phải
+gán các tham chiếu tương ứng 1 cách thủ công. (Có thể lưu trữ thông qua các bài sau)
+
+### 3.3.3. Sử dụng các `prefabs` vừa được tạo trên `scene` mới
+
+Tại `assets/Scenes`, chọn `scene` vừa tạo có tên `Testing Tilemap`
+
+Kéo các `prefabs` vào cửa sổ `Hierarchy` để sử dụng lại các đối tượng này trong `scene` này.
+
+`Main Camera` đã tồn tại, ta tiến hành xóa `Main Camera` có sẵn và thay thế bằng `Main Camera` trong `Prefab`
+
+Bởi vì `prefab` không lưu trữ tham chiếu nên lúc này ta sẽ phải gán toàn bộ tham chiếu cần thiết 1 cách thủ công.
+
+![Prefabs](md_assets/prefab1.png)
+
+- Đặt lại `sorting layer system` cho đúng để các đối tượng hiển thị 1 cách đúng đắn, đặt `Tilemap` layer thành giá trị `World`
+- Đặt lại `layer` đúng để nhân vật hiển thị hoạt họa đúng, `Player` hiển thị hoạt họa nhảy lên khi `Player` đứng trên không trung, cách
+xa mặt đất, tuy nhiên, lúc này ta không biết cái gì là mặt đất (thuộc `layer Ground`). Bấm chọn `Tilemap`, đặt giá trị tại `layer` thành `Ground`
+
+![Ground](md_assets/tilemapground.png)
