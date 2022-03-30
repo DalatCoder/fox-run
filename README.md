@@ -732,7 +732,7 @@ public class CameraController : MonoBehaviour
 }
 ```
 
-## 3. Making a Level
+## 3. Making a Level (tạo các bản đồ)
 
 Tạo bản đồ thông qua công cụ có sẵn của `unity` (`tilemaps`)
 
