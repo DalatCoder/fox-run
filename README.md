@@ -693,3 +693,41 @@ Sau đó, ta đặt `position.y` của `camera` bằng giá trị `c`.
 ```
 
 ![Clamping camera vertically](md_assets/clampingcameravertically.png)
+
+### 2.3. Adding parallax for vertical direction
+
+Hiện giờ việc chạy 3 cảnh song song với nhau theo trục `x` đã tạo hiệu ứng game rất đẹp.
+Tuy nhiên, khi nhân vật nhảy lên, 3 cảnh không di chuyển `y` theo.
+
+Do đó, để hoàn hảo hơn, ta đồng thời di chuyển cùng lúc nhiều cảnh ở cả 2 chiều `x` và `y`.
+
+Trước đó, ta khai báo biến `lastXPosition` để lưu lại giá trị `X` ở `frame` cũ, sang `frame` mới
+dựa vào vị trí mới và giá trị `x` này để tính được khoảng cách mà nhân vật đã di chuyển. Từ đó,
+tính toán được khoảng cách mới cho các cảnh vật ở phía sau.
+
+Tuy nhiên, lúc này ta đồng thời phải lưu giữ cả `x` và `y`. Ta có thể tạo thêm biến `lastYPosition`,
+tuy nhiên, để thuận tiện hơn, ta có thể lưu vào `Vector2`
+
+```csharp
+public class CameraController : MonoBehaviour
+{
+    private Vector2 lastPosition;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        lastPosition = transform.position;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Vector2 amountToMove = new Vector2(transform.position.x - lastPosition.x, transform.position.y - lastPosition.y);
+
+        farBackground.position += new Vector3(amountToMove.x, amountToMove.y, 0f);
+        middleBackground.position += new Vector3(amountToMove.x, amountToMove.y, 0f) * .5f;
+
+        lastPosition = transform.position;
+    }
+}
+```

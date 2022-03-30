@@ -9,12 +9,12 @@ public class CameraController : MonoBehaviour
 
     public float minHeight, maxHeight;
 
-    private float lastXPosition;
+    private Vector2 lastPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        lastXPosition = transform.position.x;
+        lastPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -22,11 +22,11 @@ public class CameraController : MonoBehaviour
     {
         transform.position = new Vector3(target.position.x, Mathf.Clamp(target.position.y, minHeight, maxHeight), transform.position.z);
 
-        float amountToMoveX = transform.position.x - lastXPosition;
+        Vector2 amountToMove = new Vector2(transform.position.x - lastPosition.x, transform.position.y - lastPosition.y);
 
-        farBackground.position += new Vector3(amountToMoveX, 0f, 0f);
-        middleBackground.position += new Vector3(amountToMoveX * .5f, 0f, 0f);
+        farBackground.position += new Vector3(amountToMove.x, amountToMove.y, 0f);
+        middleBackground.position += new Vector3(amountToMove.x, amountToMove.y, 0f) * .5f;
 
-        lastXPosition = transform.position.x;
+        lastPosition = transform.position;
     }
 }
