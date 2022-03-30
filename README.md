@@ -1268,3 +1268,71 @@ public void DealDamage()
 ```
 
 ![Heart](md_assets/hearts2.png)
+
+### 4.7. Show half hearts
+
+Sau khi đã hiển thị 2 dạng `heart` là `full heart` và `empty heart`. Lúc này,
+ta sẽ thử thách bản thân với `half heart`
+
+- Đặt giá trị `maxHealth` lên thành `6`
+- Không tạo `6 Image` để chứa `6 Heart`
+- Có `6` giá trị, ta có thể đưa `half heart` vào
+
+```csharp
+  public void UpdateHealthDisplay()
+  {
+      switch (PlayerHealthController.instance.currentHealth)
+      {
+          case 6:
+              heart1.sprite = heartFull;
+              heart2.sprite = heartFull;
+              heart3.sprite = heartFull;
+
+              break;
+
+          case 5:
+              heart1.sprite = heartFull;
+              heart2.sprite = heartFull;
+              heart3.sprite = heartHalf;
+
+              break;
+
+          case 4:
+              heart1.sprite = heartFull;
+              heart2.sprite = heartFull;
+              heart3.sprite = heartEmtpty;
+
+              break;
+
+          case 3:
+              heart1.sprite = heartFull;
+              heart2.sprite = heartHalf;
+              heart3.sprite = heartEmtpty;
+
+              break;
+
+          case 2:
+              heart1.sprite = heartFull;
+              heart2.sprite = heartEmtpty;
+              heart3.sprite = heartEmtpty;
+
+              break;
+
+          case 1:
+              heart1.sprite = heartHalf;
+              heart2.sprite = heartEmtpty;
+              heart3.sprite = heartEmtpty;
+
+              break;
+
+          default:
+              heart1.sprite = heartEmtpty;
+              heart2.sprite = heartEmtpty;
+              heart3.sprite = heartEmtpty;
+
+              break;
+      }
+  }
+```
+
+![Heart Half](md_assets/heafthafl.png)

@@ -7,7 +7,7 @@ public class UIController : MonoBehaviour
     public static UIController instance;
 
     public UnityEngine.UI.Image heart1, heart2, heart3;
-    public Sprite heartFull, heartEmtpty;
+    public Sprite heartFull, heartEmtpty, heartHalf;
 
     private void Awake()
     {
@@ -30,29 +30,43 @@ public class UIController : MonoBehaviour
     {
         switch (PlayerHealthController.instance.currentHealth)
         {
-            case 3:
+            case 6:
                 heart1.sprite = heartFull;
                 heart2.sprite = heartFull;
                 heart3.sprite = heartFull;
 
                 break;
 
-            case 2:
+            case 5:
+                heart1.sprite = heartFull;
+                heart2.sprite = heartFull;
+                heart3.sprite = heartHalf;
+
+                break;
+
+            case 4:
                 heart1.sprite = heartFull;
                 heart2.sprite = heartFull;
                 heart3.sprite = heartEmtpty;
 
                 break;
 
-            case 1:
+            case 3:
+                heart1.sprite = heartFull;
+                heart2.sprite = heartHalf;
+                heart3.sprite = heartEmtpty;
+
+                break;
+
+            case 2:
                 heart1.sprite = heartFull;
                 heart2.sprite = heartEmtpty;
                 heart3.sprite = heartEmtpty;
 
                 break;
 
-            case 0:
-                heart1.sprite = heartEmtpty;
+            case 1:
+                heart1.sprite = heartHalf;
                 heart2.sprite = heartEmtpty;
                 heart3.sprite = heartEmtpty;
 
