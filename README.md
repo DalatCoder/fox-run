@@ -920,3 +920,32 @@ Bởi vì `prefab` không lưu trữ tham chiếu nên lúc này ta sẽ phải 
 xa mặt đất, tuy nhiên, lúc này ta không biết cái gì là mặt đất (thuộc `layer Ground`). Bấm chọn `Tilemap`, đặt giá trị tại `layer` thành `Ground`
 
 ![Ground](md_assets/tilemapground.png)
+
+## 4. Health System
+
+### 4.1. Adding Spikers
+
+Thêm 1 số vật cản vào `Level`.
+
+Vào thư mục `assets/2D Platformer Assets/Graphics/Level Mechanics`, tại đây sẽ có 1 số hình
+ảnh `spiker`, chọn 1 hình rồi kéo vào `Scene`.
+
+Để `Player` có thể tương tác được với khối `spiker` này, ta cần đặt `collider` vào `spiker`
+
+![Spiker](md_assets/spiker.png)
+
+Trong trường hợp của `spiker`, dùng `box collider` là thích hợp, tuy nhiên cần điều chỉnh lại
+kích thước của `box collider` cho phù hợp. (thông qua nút `edit collider`)
+
+Vấn đề người dùng bị cản lại khi lại gần `spiker`
+
+![Image](md_assets/spiker1.png)
+
+Khi `Player` lại gần vật thể `spiker`, họ sẽ bị cản lại bởi `collider`. Để vẫn đảm bảo việc xác
+định `collision` giữa `Player` và `spiker`, đồng thời `spiker` không cản `Player`, ta cấu hình như sau:
+
+- Chọn `box collider 2d`
+- Tick vào `Is Trigger`
+
+Khi này, `Player` có thể đi xuyên qua `spiker`, tuy nhiên khi `Player` đi vào vùng `trigger` của `spiker`,
+hệ thống sẽ thông báo để chúng ta code chức năng trừ điểm sức khỏe của nhân vật.
