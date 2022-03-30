@@ -949,3 +949,38 @@ Khi `Player` lại gần vật thể `spiker`, họ sẽ bị cản lại bởi 
 
 Khi này, `Player` có thể đi xuyên qua `spiker`, tuy nhiên khi `Player` đi vào vùng `trigger` của `spiker`,
 hệ thống sẽ thông báo để chúng ta code chức năng trừ điểm sức khỏe của nhân vật.
+
+### 4.2. Creating a Health system
+
+Tạo 1 hệ thống sức khỏe cho nhân vật (có bao nhiêu `trái tim`), khi nhân vật chạm vào các vật cản như `spiker` ở
+trên thì điểm sẽ bị trừ. Trừ hết thì `game over`.
+
+Để làm điều đó, ta tiến hành tạo 1 `script` mới, đặt tên `PlayerHealthController`. Sau đó, kéo `script` này vào
+đối tượng `Player`.
+
+Đầu tiên, ta tiến hành tạo 1 số biến lưu trữ trạng thái sức khỏe của người chơi
+
+- Số `heart` tối đa
+- Số `heart` hiện tại
+
+Bên cạnh đó, ta tiến hành tạo 1 số hàm tiện ích liên quan đến việc kiểm soát số lượng `heart`
+
+- `public void DealDamage()`, được gọi để trừ số `heart` hiện có
+
+```csharp
+public void DealDamage()
+{
+    currentHealth -= 1;
+
+    if (currentHealth <= 0)
+    {
+        gameObject.SetActive(false);
+    }
+}
+```
+
+Khi hàm này được gọi, nó sẽ giảm `heart` đi 1 đơn vị. Trong trường hợp `heart == 0`, đối tượng `Player`
+sẽ bị `deactive`, biến mất khỏi màn hình hiện tại.
+
+- `gameObject` tương tự như `transform`, được `inject` tự động vào `script` bởi `unity`
+- `gameObject` giống `this`
