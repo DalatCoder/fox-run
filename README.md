@@ -606,3 +606,61 @@ public class CameraController : MonoBehaviour
 ```
 
 ![CAmera](md_assets/camera.png)
+
+### 2.2. Adding parallax for depth
+
+Để tạo 1 số hiệu ứng hình ảnh cho game, ta sẽ áp dụng kĩ thuật `parallax`. Di chuyển
+`camera` chứa cảnh của `Player` đồng thời di chuyển `camera` chứa cảnh `Background`.
+
+Để thử nghiệm cơ bản, ta chỉ cần kéo `game object` tên `back` trở thành con của đối tượng `camera`.
+
+Lúc này khi nhân vật di chuyển, `camera` di chuyển theo nhân vật, `backgroud` cũng di chuyển
+theo `camera`, tạo hiệu ứng thế giới đang chuyển động.
+
+Các bước tạo hiệu ứng sinh động cho game
+
+- Ta đã có 2 nền sẵn:
+  
+  - 1 nền ở xa, hình bãi biển màu xanh (`back object`)
+  - 1 nền ở trung gian, hình những ngọn cây (`middle object`)
+
+- Khi nhân vật di chuyển, ta cần di chuyển đồng thời 2 nền này. Lúc này sẽ có cả 3 thứ cùng nhau di chuyển trên màn hình, bao gồm:
+camera, hình ở xa và hình ở trung gian. Trong đó, camera và hình ở xa sẽ di chuyển cùng tọa độ `x`, hình trung gian sẽ di chuyển
+bằng `0.5x`. Lúc này hiệu ứng tạo ra sẽ rất tuyệt vời.
+
+- Đầu tiên, cần phải thay đổi vị trí của 2 nền trong `CameraController script`, do đó ta sẽ lưu giữ tham chiếu đến 2 đối tượng
+`Transform` tương ứng (làm như đối tượng `Player` ở trên)
+
+- Tại mỗi khung hình `update`, ta cần tính được khoảng cách mà nhân vật đã di chuyển theo trục `x` so với `frame` trước đó
+- Dựa vào khoảng cách nhân vật đã di chuyển so với `frame` trước đó, ta tính được vị trí mới của 2 hình nền
+
+```csharp
+public class CameraController : MonoBehaviour
+{
+    public Transform target;
+    public Transform farBackground, middleBackground;
+
+    private float lastXPosition;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        lastXPosition = transform.position.x;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
+
+        float amountToMoveX = transform.position.x - lastXPosition;
+
+        farBackground.position += new Vector3(amountToMoveX, 0f, 0f);
+        middleBackground.position += new Vector3(amountToMoveX * .5f, 0f, 0f);
+
+        lastXPosition = transform.position.x;
+    }
+}
+```
+
+![Parallax](md_assets/parallax.png)
