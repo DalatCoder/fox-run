@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
     public Transform target;
     public Transform farBackground, middleBackground;
 
+    public float minHeight, maxHeight;
+
     private float lastXPosition;
 
     // Start is called before the first frame update
@@ -18,7 +20,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
+        transform.position = new Vector3(target.position.x, Mathf.Clamp(target.position.y, minHeight, maxHeight), transform.position.z);
 
         float amountToMoveX = transform.position.x - lastXPosition;
 

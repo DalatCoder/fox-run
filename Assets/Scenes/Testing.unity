@@ -450,6 +450,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b208bc66dbf3aef42923efc7c4b75051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 443677388}
+  farBackground: {fileID: 270509996}
+  middleBackground: {fileID: 99542106}
+  minHeight: -1.5
+  maxHeight: 2.5
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

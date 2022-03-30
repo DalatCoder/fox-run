@@ -664,3 +664,32 @@ public class CameraController : MonoBehaviour
 ```
 
 ![Parallax](md_assets/parallax.png)
+
+### 2.3. Clamping camera vertically
+
+Hiện giờ, khi nhân vật di chuyển, camera cũng di chuyển theo nhưng chỉ theo trục `x`, trục
+`y` và `z` giữ nguyên. Tuy nhiên, nếu làm như này thì khi nhân vật nhảy lên sẽ không có cảm giác
+chân thực. Tuy nhiên, ta cũng không muốn camera đi theo trục `y` của nhân vật bởi vì lúc này camera
+có thể lên quá cao hoặc quá thấp, dẫn tới lệch khỏi khung hình.
+
+Do đó, ta cần 1 biện pháp để di chuyển trục `y` của `camera` 1 cách hợp lý.
+
+Để làm được điều này, ta đặt 2 giá trị `minHeight, maxHeight`, quay lại `editor`, tiến hành đo đạc và
+đặt giá trị cho 2 biến này. Trong đó:
+
+- `minHeight` là giá trị `y` thấp nhất, nếu thấp hơn giá trị này sẽ không tính
+- `maxHeight` là giá trị `y` cao nhất, nếu cao hơn giá trị này sẽ không tính
+
+Lúc này, ta sẽ tính toán như sau:
+
+- Nếu `y` của nhân vật nằm trong khoảng `minHeight` đến `maxHeight` thì dùng `c = y`
+- Nếu `y` của nhân vật lớn hơn `maxHeight` thì `c = maxHeight`
+- Nếu `y` của nhân vật nhỏ hơn `minHeight` thì `c = minHeight` (trường hợp này diễn ra khi nhân vật bị rớt xuống hố)
+
+Sau đó, ta đặt `position.y` của `camera` bằng giá trị `c`.
+
+```csharp
+ transform.position = new Vector3(target.position.x, Mathf.Clamp(target.position.y, minHeight, maxHeight), transform.position.z);
+```
+
+![Clamping camera vertically](md_assets/clampingcameravertically.png)
