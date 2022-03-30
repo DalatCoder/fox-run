@@ -731,3 +731,51 @@ public class CameraController : MonoBehaviour
     }
 }
 ```
+
+## 3. Making a Level
+
+Tạo bản đồ thông qua công cụ có sẵn của `unity` (`tilemaps`)
+
+### 3.1. Creating a Tile Palette
+
+Tạo 1 cảnh mới, chọn menu `File` > `New scene`
+
+Lưu cảnh lại: chọn `File` > `Save As`, tìm đến thư mục `scenes`, lưu thành `Testing Tile`
+
+Bây giờ mình cần phải vẽ bản đồ mới trên `scene` này, để làm điều đó ta cần phải
+có 1 số `tiles` (viên gạch) để có thể vẽ.
+
+Trong thư mục `assets`, di chuyển tới `graphics`, `level art`, `tileset`, tại đây có
+1 `sprite` chứa danh sách các `tiles` có thể dùng để vẽ bản đồ.
+
+Ta có thể kéo từng `tile` vào rồi sắp xếp lại để tạo thành bản đồ nhưng như vậy sẽ rất lâu.
+
+![Tile](md_assets/tile.png)
+
+Thay vì làm thủ công từng cái như vậy, ta sẽ dùng `unity tilemaps system` để tạo địa hình
+1 cách nhanh chóng.
+
+#### 3.1.1. Tạo titleset
+
+Cần phải tạo `tileset` trước.
+
+Vào `windows` > `2D` > `Tile Palette`, kéo cửa sổ này bên cạnh cửa sổ `Hierarchy`
+
+Nhấn vào nút để tạo 1 `palette` mới, đặt tên `Main Tileset`, lưu vào folder `assets/Tiles`
+
+![Tile palette](md_assets/tilepalette.png)
+
+Cửa sổ hiện tại của `Main Tileset` hiện đang trống, ta tiến hành kéo `tileset` được cung cấp sẵn
+trong thư mục `graphics`, `level art`, `tileset` vào đây.
+
+Hệ thống sẽ hỏi nơi muốn lưu trữ các `tiles` chuẩn bị được tạo, chọn thư mục `assets/Tiles`
+
+Sau khi quá trình tạo hoàn tất, ta sẽ có 1 mảng các `tiles` trong cửa sổ `Main Tileset`. Ta có thể dùng
+tùy ý các `tiles` này để vẽ địa hình cho `map` mới.
+
+![Done](md_assets/tiledone.png)
+
+Đồng thời, tại thư mục `assets/Tiles`, ta cũng thấy danh sách 1 loạt các `Tiles` được hệ thống tự động
+lưu tại đây.
+
+Ta có thể cấu hình 1 số thứ trên các `Tile` này như `Color`, `Collider Type` (nói sau)
