@@ -1149,3 +1149,122 @@ Cấu hình `Heart` khi `unity` `scale` kích thước màn hình
   - Đặt kích thước `Reference Resolution` thành `1920 x 1080` (ứng với kích thước màn hình `dev` hiện tại)
 
   ![Scale](md_assets/scale.png)
+
+### 4.6. Updating Heart UI
+
+Đã có giao diện `Heart` được vẽ thông qua công cụ `Canvas` và được tối ưu hiển thị thông qua việc dùng mỏ neo `anchor` và `scale mode`.
+
+Lúc này, ta cần có giải pháp để cập nhật trạng thái hiển thị của `Heart`
+
+Tạo 1 `script` mới để kiểm soát việc hiển thị `Heart`. Thông thường, với mỗi đối tượng, ta sẽ tạo 1 `script` riêng biệt để quản lý.
+
+- Chọn folder `scripts`, tạo script mới đặt tên `UIController`
+- Gắn `script` này vào đối tượng `Canvas`
+
+Để thay đổi việc hiển thị `Heart` trên `UI`, ta cần xác định các đối tượng liên quan để tiến hành tham chiếu tới
+
+- 3 khung `Image` bên trong `Canvas`
+- 2 `Sprite` hiển thị trạng thái `Heart Full` và `Heart Empty`
+
+Ta cần truyền tham chiếu đến 5 thứ này vào `UIController`
+
+```csharp
+  public UnityEngine.UI.Image heart1, heart2, heart3;
+  public Sprite heartFull, heartEmtpty;
+```
+
+![Heart](md_assets/hearts1.png)
+
+Sau đó, dựa vào số lượng `Heart` còn lại, ta sẽ hiển thị tương ứng.
+
+- Dùng `heart.sprite = sprite` để thay đổi `sprite` bên trong mỗi khung `Image`
+
+Bên cạnh đó, để tiện truy cập vào các phương thức bên trong `UIController`, ta áp dụng mẫu `singleton` cho `class` này.
+
+```csharp
+public class UIController : MonoBehaviour
+{
+    public static UIController instance;
+
+    public UnityEngine.UI.Image heart1, heart2, heart3;
+    public Sprite heartFull, heartEmtpty;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void UpdateHealthDisplay()
+    {
+        switch (PlayerHealthController.instance.currentHealth)
+        {
+            case 3:
+                heart1.sprite = heartFull;
+                heart2.sprite = heartFull;
+                heart3.sprite = heartFull;
+
+                break;
+
+            case 2:
+                heart1.sprite = heartFull;
+                heart2.sprite = heartFull;
+                heart3.sprite = heartEmtpty;
+
+                break;
+
+            case 1:
+                heart1.sprite = heartFull;
+                heart2.sprite = heartEmtpty;
+                heart3.sprite = heartEmtpty;
+
+                break;
+
+            case 0:
+                heart1.sprite = heartEmtpty;
+                heart2.sprite = heartEmtpty;
+                heart3.sprite = heartEmtpty;
+
+                break;
+
+            default:
+                heart1.sprite = heartEmtpty;
+                heart2.sprite = heartEmtpty;
+                heart3.sprite = heartEmtpty;
+
+                break;
+        }
+    }
+}
+```
+
+Sau khi đã có phương thức cập nhật `Heart` trên giao diện, ta tiến hành gọi phương thức này
+khi `Player` chạm vào `spikes`
+
+```csharp
+public void DealDamage()
+{
+    currentHealth -= 1;
+
+    if (currentHealth <= 0)
+    {
+        currentHealth = 0;
+        gameObject.SetActive(false);
+    }
+
+    UIController.instance.UpdateHealthDisplay();
+}
+```
+
+![Heart](md_assets/hearts2.png)
