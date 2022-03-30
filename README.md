@@ -779,3 +779,85 @@ tùy ý các `tiles` này để vẽ địa hình cho `map` mới.
 lưu tại đây.
 
 Ta có thể cấu hình 1 số thứ trên các `Tile` này như `Color`, `Collider Type` (nói sau)
+
+### 3.2. Drawing a Level with Tilemaps
+
+Để tạo địa hình 1 cách dễ dàng, ta sẽ dùng đối tượng `Tilemap` có sẵn của `unity`.
+
+Quay lại cửa sổ `Hierarchy`, ta có 2 cách để tạo mới 1 `Tilemap`
+
+- Click chuột phải lên vùng bên trong cửa sổ `Hierarchy`, chọn `Create`
+- Chọn Menu `Game Object`, `2D Object`, `Tilemap`
+
+#### 3.2.1. Vẽ địa hình thuần
+
+Sau đó, để tiến hành vẽ địa hình, ta quay lại cửa sổ `Tile Palette`
+
+- Chọn vào 1 `tile` mong muốn rồi qua bên `tilemap` để vẽ
+- Có thể chọn công cụ `Rectangle` trong cửa sổ `Tile Palette` để vẽ hình khối chữ nhật (vẽ lòng đất)
+
+Sau khi vẽ xong ta đã có 1 địa hình, tuy nhiên lúc này nó chỉ là ảnh thuần, không hề có bất kỳ 1 hiệu ứng
+vật lý nào. Nếu đặt 1 khối tròn ở trên rồi thả cho nó rơi xuống, khối tròn này sẽ đi xuyên qua tấm địa hình
+này như chưa hề có gì xảy ra
+
+![Image](md_assets/draw.png)
+
+#### 3.2.2. Thêm `collider` để tấm hình địa hình này có thể tương tác với các `game object` khác
+
+Quay về cửa sổ `Hierarchy`, chọn đối tượng `Tilemap` (`Tilemap` vừa tạo ở trên)
+
+Thêm component `Tilemap Collider 2D`
+
+![Tilemap](md_assets/tilemapcollider2d.png)
+
+Sau khi thêm `component` này vào, ta thấy rõ rất nhiều `collider` được thêm vào và bọc xung quanh mỗi `tile`.
+Nếu ta không muốn 1 `tile` được bọc `collider`, chỉ cần cấu hình `tile` đó.
+
+Cách cấu hình 1 `tile` không muốn bọc `collider`
+
+- Click vào `tile` tại đường dẫn `assets/Tiles`
+- Tại `collider_type`, chọn `None`
+
+#### 3.2.3. Tối ưu số lượng `collider`
+
+Hiện tại, mỗi `tile` đều được bọc 1 `collider` dẫn đến số lượng `collision` phải check trở nên rất nhiều, gây ra lãng phí
+và `lag` game.
+
+Ta có thể gom các `collider` nhỏ này thành 1 thể thống nhất thông qua `component` `Composite Collider 2D`
+
+- Chọn `Tilemap` game object
+- Thêm component `Composite Collider 2D`
+
+Sau khi thêm `Composite Collider`, hệ thống sẽ tự thêm vào 1 `Rigidbody 2D`. Nhiệm vụ của `Rigidbody 2D` để check
+xem có `collision` nào diễn ra giữa 2 `collider` kề nhau hay không. Nếu kề nhau thì nó gom thành 1 cái, cứ như vậy, tất
+cả `collider` kề nhau trong `Tilemap` sẽ được gom thành 1 `collider` lớn.
+
+- Tại component `Tilemap Collider 2D`
+- Tick chọn `Used by Composite`
+
+![Composite Collider](md_assets/compositecollider.png)
+
+Lúc này, hệ thống sẽ vẽ các đường nối bên ngoài để tạo thành 1 `collider` lớn, phần bên trong hoàn toàn trống rỗng
+và có thể chứa được các `game object` khác. Lúc này, có thể xảy ra tình trạng `Player` bị `lag` và rơi vào vùng rỗng này.
+
+Vì vậy, bây giờ ta sẽ tìm cách để lấp đầy vùng rỗng này.
+
+- Tại `composite collider 2d`
+- Chọn `geometry type` thành `polygon`
+
+Lúc này địa hình sẽ trở thành 1 khối vật thể đặc hoàn toàn
+
+![Solid](md_assets/solidcollider.png)
+
+#### 3.2.4. Bỏ hiệu ứng vật lý tác động lên địa hình
+
+Khi thêm `composite collider`, hệ thống tự thêm `rigidbody2d` (để detect collision giữa 2 collider kề nhau, từ đó gom lại).
+Lúc này, `rigidbody2d` mang đến các hiệu ứng vật lý, dẫn đến `Tilemap` vừa tạo ra bị trọng lực kéo xuống dưới
+màn hình.
+
+Vì vậy, ta cần phải tìm cách để bỏ hiệu ứng vật lý này.
+
+- Tại `rigidbody 2d`
+- Chọn `Body type` thành `Kinematic`
+
+![Done](md_assets/tilemapdone.png)
