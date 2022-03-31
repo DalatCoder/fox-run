@@ -1390,3 +1390,65 @@ trong mỗi lần `frame update`.
       }
   }
 ```
+
+### 4.9. Displaying Invincibility
+
+Ta đã có `logic` cho phép người chơi miễn nhiễm trong 1 đoạn thời gian. Tuy nhiên,
+ta cần phải có giải pháp để hiển thị lên màn hình thông báo cho người chơi biết họ vẫn
+đang trong thời gian miễn nhiễm.
+
+Một cách đơn giản để giải quyết là đặt giá trị `alpha` của đối tượng `Player`, làm cho đối
+tượng này trở nên trong suốt hơn, từ đó người chơi có thể dễ dàng nhận ra.
+
+Giá trị `alpha` này thuộc về `component` `Sprite Renderrer` trên đối tượng `Player`. Vì vậy, ta
+cần phải tham chiếu đến `component` này trong `PlayerHealthController`
+
+```csharp
+public class PlayerHealthController : MonoBehaviour
+{
+    private SpriteRenderer theSR;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        theSR = GetComponent<SpriteRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (invincibleCounter > 0)
+        {
+            invincibleCounter -= Time.deltaTime;
+
+            if (invincibleCounter <= 0)
+            {
+                theSR.color = new Color(theSR.color.r, theSR.color.g, theSR.color.b, 1f);
+            }
+        }
+    }
+
+    public void DealDamage()
+    {
+        if (invincibleCounter <= 0)
+        {
+            currentHealth -= 1;
+
+            if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                invincibleCounter = invincibleLength;
+                theSR.color = new Color(theSR.color.r, theSR.color.g, theSR.color.b, 0.5f);
+            }
+
+            UIController.instance.UpdateHealthDisplay();
+        }
+    }
+}
+```
+
+![Invincible](md_assets/invincible.png)

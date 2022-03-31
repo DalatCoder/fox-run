@@ -11,6 +11,8 @@ public class PlayerHealthController : MonoBehaviour
     public float invincibleLength;
     private float invincibleCounter;
 
+    private SpriteRenderer theSR;
+
     // Happens right before the Start() function
     private void Awake()
     {
@@ -21,13 +23,22 @@ public class PlayerHealthController : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+
+        theSR = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
         if (invincibleCounter > 0)
+        {
             invincibleCounter -= Time.deltaTime;
+
+            if (invincibleCounter <= 0)
+            {
+                theSR.color = new Color(theSR.color.r, theSR.color.g, theSR.color.b, 1f);
+            }
+        }
     }
 
     public void DealDamage()
@@ -44,6 +55,7 @@ public class PlayerHealthController : MonoBehaviour
             else
             {
                 invincibleCounter = invincibleLength;
+                theSR.color = new Color(theSR.color.r, theSR.color.g, theSR.color.b, 0.5f);
             }
 
             UIController.instance.UpdateHealthDisplay();
