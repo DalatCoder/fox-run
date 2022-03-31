@@ -8,6 +8,9 @@ public class PlayerHealthController : MonoBehaviour
 
     public int currentHealth, maxHealth;
 
+    public float invincibleLength;
+    private float invincibleCounter;
+
     // Happens right before the Start() function
     private void Awake()
     {
@@ -23,19 +26,27 @@ public class PlayerHealthController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (invincibleCounter > 0)
+            invincibleCounter -= Time.deltaTime;
     }
 
     public void DealDamage()
     {
-        currentHealth -= 1;
-
-        if (currentHealth <= 0)
+        if (invincibleCounter <= 0)
         {
-            currentHealth = 0;
-            gameObject.SetActive(false);
-        }
+            currentHealth -= 1;
 
-        UIController.instance.UpdateHealthDisplay();
+            if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                invincibleCounter = invincibleLength;
+            }
+
+            UIController.instance.UpdateHealthDisplay();
+        }
     }
 }

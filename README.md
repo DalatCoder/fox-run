@@ -1336,3 +1336,57 @@ ta sẽ thử thách bản thân với `half heart`
 ```
 
 ![Heart Half](md_assets/heafthafl.png)
+
+### 4.8. Adding Invicibility
+
+Khi chúng ta xếp 1 dàn bẫy chông (`spikes`) kề nhau, người dùng đi qua hết loạt bẫy này sẽ bị trừ sạch `heart`.
+Hoặc khi người dùng nhảy vào trúng điểm giao giữa 2 cái bẫy chông cũng sẽ bị trừ 2 `heart`. Điều này mang lại cảm
+giác khá tệ khi chơi game. Do đó, giờ ta sẽ thêm tính năng `invicibility`, khi người dùng va vào bẫy chông, họ
+chỉ bị trừ 1 điểm `heart`. Sau 1 khoảng thời gian, nếu va phải 1 `spike` khác thì họ mới tiếp tục bị trừ điểm.
+
+Tính năng này sẽ được thêm vào `PlayerHealthController` bởi vì `script` này chứa code liên quan đến việc kiểm
+soát trạng thái `heart` của người chơi.
+
+Ta cần tạo 1 số biến:
+
+- `invincibleLength`: thời gian người chơi miễn nhiễm
+- `invincibleCounter`: đếm ngược thời gian miễn nhiễm
+
+Khi đã có 2 biến này, ta tiến hành xử lý `logic`
+
+- Tại phương thức `DealDamage`, nếu thời gian `invincibleCounter <= 0` thì ta tiến hành đặt `invincibleCounter = invincibleLength` và trừ `heart`
+- Khi `invincibleCounter > 0` nghĩa là người chơi đang trong giai đoạn miễn nhiễm, ta không trừ `heart`
+- Tiếp đó, ta cần 1 giải pháp để giảm `invincibleCounter` sau mỗi lần `update frame`, cách tốt nhất là trừ
+giá trị `invincibleCounter` với giá trị `Time.DeltaTime`, trong đó `DeltaTime` là thời gian cần thiết
+trong mỗi lần `frame update`.
+  
+  - Nếu `60FPS`, `deltaTime` = `1/60` (phút)
+  - Nếu `30FPS`, `deltaTIme` = `1/30` (phút)
+
+```csharp
+  void Update()
+  {
+      if (invincibleCounter > 0)
+          invincibleCounter -= Time.deltaTime;
+  }
+
+  public void DealDamage()
+  {
+      if (invincibleCounter <= 0)
+      {
+          currentHealth -= 1;
+
+          if (currentHealth <= 0)
+          {
+              currentHealth = 0;
+              gameObject.SetActive(false);
+          }
+          else
+          {
+              invincibleCounter = invincibleLength;
+          }
+
+          UIController.instance.UpdateHealthDisplay();
+      }
+  }
+```

@@ -492,10 +492,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 545413037, guid: 192f5cd2ab84e0a498452b16763fc0b7, type: 3}
-      propertyPath: maxHealth
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 1125291532268261458, guid: 192f5cd2ab84e0a498452b16763fc0b7,
         type: 3}
       propertyPath: m_Name
