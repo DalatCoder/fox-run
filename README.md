@@ -1639,3 +1639,47 @@ Cuối cùng, khi hiệu ứng `Knock Back` diễn ra, ta tiến hành `trigger`
 ```
 
 ![Hurt](md_assets/hurt.png)
+
+## 5. Checkpoints & Respawing
+
+Đến lúc này, khi người chơi va phải vật cản và mất máu đến chết, họ sẽ không thể chơi nữa.
+Ta tiến hành thêm vào các điểm lưu (`checkpoint`), khi người chơi chết, họ sẽ được tái
+sinh ở 1 trong các địa điểm này.
+
+### 5.1. Making Checkpoints
+
+Tạo điểm lưu `checkpoint`
+
+- Kéo `sprite` `checkpoint` vào `Scene`
+- Vào thư mục `assets/2D Platformer Assets/Graphics/Level Mechanics`, kéo `check point off`
+
+![Check point](md_assets/checkpoint.png)
+
+Tiếp theo, ta cần tạo `logic` kích hoạt `checkpoint` (thay đổi `sprite` từ `checkpoint off` thành `checkpoint on`) khi
+`Player` di chuyển qua đối tượng `checkpoint`
+
+- Tạo `collider box 2D` cho đối tượng `checkpoint` để có thể xác định `collision` giữa `Player` và `Checkpoint`
+  - Đặt `collider` thành `trigger` để `Player` có thể đi xuyên qua `Checkpoint`
+  - Tạo vùng `collider` lớn 1 tí để khi người chơi tới gần thì lập tức kích hoạt `checkpoint`
+
+  ![Circle collider](md_assets/circlecollider.png)
+
+- Tạo script để làm logic, đặt tên `CheckPoint` và gắn `script` này vào đối tượng `Checkpoint` ở trên
+  - Tạo 1 số biến để dùng
+    - Tham chiếu đến đối tượng `Sprite Renderrer` để thay đối `sprite` `on` `off`
+    - Tham chiếu đến `sprite` `on` (`Checkpoint On`)
+    - Tham chiếu đến `sprite` `off` (`Checkpoint Off`)
+    - Trong sự kiện `collision`, kiểm tra đối tượng có phải `Player` hay không và đặt sprite `on`
+
+    ```csharp
+      private void OnTriggerEnter2D(Collider2D other)
+      {
+          if (!other.CompareTag("Player")) return;
+
+          theSR.sprite = checkPointOn;
+      }
+    ```
+
+- Kéo đối tượng `Checkpoint` vào `Prefabs` để tái sử dụng ở những `Level` (địa hình, bản đồ) khác
+
+![Checkpoint](md_assets/checkpointstate.png)
