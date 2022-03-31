@@ -497,6 +497,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1125291532268261461, guid: 192f5cd2ab84e0a498452b16763fc0b7,
+        type: 3}
+      propertyPath: knockBackForce
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1125291532268261461, guid: 192f5cd2ab84e0a498452b16763fc0b7,
+        type: 3}
+      propertyPath: knockBackLength
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 1125291532268261463, guid: 192f5cd2ab84e0a498452b16763fc0b7,
         type: 3}
       propertyPath: m_RootOrder

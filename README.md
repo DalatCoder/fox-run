@@ -1452,3 +1452,148 @@ public class PlayerHealthController : MonoBehaviour
 ```
 
 ![Invincible](md_assets/invincible.png)
+
+### 4.10. Adding Knockback
+
+Khi người chơi chạm vào chướng ngại vật, hệ thống sẽ:
+
+- Trừ `heart`
+- Đặt giá trị `invincibleCounter` để người chơi tạm thời miễn nhiễm
+- Đặt giá trị `alpha` để người chơi cảm nhận được mình đang trong thời gian miễn nhiễm
+
+Tiếp theo, ta sẽ thêm 1 chút hiệu ứng thụt lùi, người chơi chạm vào chướng ngại, nhảy lên và
+thụt lùi vài bước (hàm ý rằng chúng ta muốn giúp người chơi tránh xa khỏi chướng ngại)
+
+Người chơi sẽ nhảy lên, thụt lùi ra sau và không thể bấm di chuyển nhân vật khi đang trong
+trạng thái thụt lùi. Những thứ này liên quan đến việc điều khiển nhân vật, do đó ta sẽ
+code trong phần `PlayerController`.
+
+Đầu tiên, khai báo 1 số biến:
+
+- `knockBackLength`: thời gian diễn ra hiệu ứng `knockBack`
+- `knockBackForce`: lực nhảy khi diễn ra hiệu ứng `knockBack`
+- `knockBackCounter`: đếm ngược thời gian `knockBack` về `0`
+
+Tạo 1 phương thức để `trigger` hiệu ứng `knockBack` khi người chơi va chạm vào vật cản
+
+```csharp
+  public void KnockBack()
+  {
+      knockBackCounter = knockBackLength;
+  }
+```
+
+Khi người dùng va chạm vật cản, phương thức `DealDamage` được gọi, lúc này ta cần truy cập vào
+phương thức `KnockBack` trên `PlayerController`. Để việc truy cập trở nên dễ hơn, ta áp dụng
+mẫu `singleton` vào `PlayerController`
+
+```csharp
+  public static PlayerController instance;
+
+  private void Awake()
+  {
+      instance = this;
+  }
+```
+
+Khi hiệu ứng `KnockBack` đang diễn ra, người chơi sẽ không thể bấm vào bất kỳ nút nào để
+di chuyển `Player`, để làm được điều đó, tại phương thức `update`, ta sẽ kiểm tra điều kiện như thế này
+
+```csharp
+  void Update()
+  {
+      if (knockBackCounter > 0)
+      {
+          theBD.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), theBD.velocity.y);
+
+          isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, .2f, whatIsGround);
+
+          if (isGrounded) canDoubleJump = true;
+
+          // ...
+
+          if (theBD.velocity.x < 0) theSR.flipX = true;
+          else if (theBD.velocity.x > 0) theSR.flipX = false;
+      }
+      else
+      {
+          knockBackCounter -= Time.deltaTime;
+      }
+
+      animator.SetFloat("moveSpeed", Mathf.Abs(theBD.velocity.x));
+      animator.SetBool("isGrounded", isGrounded);
+  }
+```
+
+Khi thêm điều kiện này, khi người chơi va phải vật cản, ta không thể dùng bàn phím để điều khiển
+người chơi, tuy nhiên `Player` cứ chạy về phía trước. Khá buồn cười, điều này xảy ra bởi vì
+ta chưa cập nhật vận tốc của người chơi về `0` (đặt `velocity.x = 0`). Vì có vận tốc theo trục `x`
+nên `Player` cứ tiếp tục chạy.
+
+Đặt lại vận tốc theo trục `x` về `0`, còn trục `y` thì giữ nguyên, nếu `Player` đang rơi (theo trục `y`)
+thì sẽ tiếp tục rơi sau mỗi `frame` (do trọng lực)
+
+```csharp
+  public void KnockBack()
+  {
+      knockBackCounter = knockBackLength;
+      theBD.velocity = new Vector2(0f, theBD.velocity.y);
+  }
+```
+
+Tiếp theo, để trở nên sinh động hơn, người chơi sẽ nhảy lên 1 tí khi va phải vật cản, do đó, ta
+sẽ đặt giá trị trục `y` bằng giá trị `knockBackForce`
+
+```csharp
+  public void KnockBack()
+  {
+      knockBackCounter = knockBackLength;
+      theBD.velocity = new Vector2(0f, knockBackForce);
+  }
+```
+
+Tiếp đó, `Player` cần phải thụt lùi lại 1 tí (cảm giác như đang tránh xa khỏi vật cản nguy hiểm).
+Trong thời gian diễn ra hiệu ứng `KnockBack`, người chơi sẽ bị lùi qua phải hoặc qua trái, tùy vào hướng
+hiện tại (có thể xác định dựa trên thuộc tính `Sprite Renderrer` > `Flip X`)
+
+- Lúc đầu game, người chơi luôn hướng về phía trước, do đó khi `KnockBack` diễn ra, trục `x` sẽ bị trừ đi 1 khoảng `knockBackForce` để làm người chơi lùi lại sau mỗi `frame`
+- Nếu người chơi nhìn về hướng ngược lại (`Flip X = true`), lúc này trục `x` sẽ cộng thêm 1 khoảng `knockBackForce` để làm người chơi lùi
+lại sau mỗi `frame`.
+- Giá trị tại trục `y` được giữ nguyên để tạo nên hiệu ứng người dùng từ từ rơi xống sau mỗi `frame` (do trọng lực nên rơi xuống)
+
+```csharp
+  void Update()
+  {
+      if (knockBackCounter <= 0)
+      {
+          theBD.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), theBD.velocity.y);
+
+          isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, .2f, whatIsGround);
+
+          if (isGrounded) canDoubleJump = true;
+
+          // ...
+
+          if (theBD.velocity.x < 0) theSR.flipX = true;
+          else if (theBD.velocity.x > 0) theSR.flipX = false;
+      }
+      else
+      {
+          knockBackCounter -= Time.deltaTime;
+
+          if (!theSR.flipX)
+          {
+              theBD.velocity = new Vector2(-knockBackForce, theBD.velocity.y);
+          }
+          else
+          {
+              theBD.velocity = new Vector2(knockBackForce, theBD.velocity.y);
+          }
+      }
+
+      animator.SetFloat("moveSpeed", Mathf.Abs(theBD.velocity.x));
+      animator.SetBool("isGrounded", isGrounded);
+  }
+```
+
+![Knock back](md_assets/knockBack.png)
