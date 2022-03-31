@@ -1597,3 +1597,45 @@ lại sau mỗi `frame`.
 ```
 
 ![Knock back](md_assets/knockBack.png)
+
+### 4.11. Add hurt animation when `player` is hit
+
+Để game trở nên sinh động hơn, trong quá trình hiệu ứng `KnockBack` diễn ra (`0.25` giây), ta sẽ
+đặt hiệu ứng `hurt` cho `Player`.
+
+Đầu tiên, ta cần tạo `hurt animation` từ các `sprite` có sẵn
+
+- Vào cửa sổ `animation`
+- Click chọn `dropdown` hiển thị danh sách `animation` hiện tại, chọn `Create`
+- Kéo liên tục 2 hình vào để được hiệu ứng kéo dài trong khoảng `30` giây
+
+![Animation](md_assets/hurtanimation.png)
+
+Sau đó, chuyển sang cửa sổ `animator` để cấu hình việc hiển thị `Player_Hurt animation`. Bên cạnh việc
+việc dùng điều kiện để kiểm soát `animation` (tạo biến `float`, `bool` lưu trạng thái rồi kiểm tra điều kiện trên các biến này),
+ta có thể dùng 1 cái gọi là `trigger` để kiểm soát việc hiển thị `animation`.
+
+- Tạo `trigger` mới, đặt tên `hurt`
+- Tạo `transition` từ `Any State` đến `Player_Hurt`
+- Đặt `transition duration = 0` để hiệu ứng `Player_Hurt` được diễn ra ngay lập tức
+- Tại khung điều kiện, chọn vào `hurt`, tức là khi `hurt` được `trigger` thì `animation` `Player_Hurt` sẽ được hiển thị
+
+Sau khoảng thời gian `Knock back`, ta sẽ chuyển hiệu ứng về `Player_Idle`
+
+- Tại `Player_Hurt`, tạo 1 `transition` đến `Player_Idle`
+- Đặt thời gian `exit`, sau khoảng thời gian này, hiệu ứng sẽ tự động chuyển
+- Đặt giá trị `0.5`
+
+Cuối cùng, khi hiệu ứng `Knock Back` diễn ra, ta tiến hành `trigger` vào `hurt` để hiệu ứng diễn ra
+
+```csharp
+  public void KnockBack()
+  {
+      knockBackCounter = knockBackLength;
+      theBD.velocity = new Vector2(0f, knockBackForce);
+
+      animator.SetTrigger("hurt");
+  }
+```
+
+![Hurt](md_assets/hurt.png)
