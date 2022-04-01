@@ -1832,3 +1832,149 @@ private void OnTriggerEnter2D(Collider2D other)
 ```
 
 ![Image](md_assets/storingspawnpoint.png)
+
+### 5.4. Respawing the Player
+
+Ta đã có vị trí để người chơi có thể hồi sinh, vậy bây giờ `script` để chứa `logic` hồi sinh người chơi sẽ đặt ở đâu?
+
+- `CheckpointController` chỉ chịu trách nhiệm kiểm soát toàn bộ `Checkpoint` trên `Scene`
+- `PlayerHealthController` khi người chơi chết, ta `deactive` đối tượng `Player`, `PlayerHealthController` đã gắn
+vào đối tượng `Player` chết, do đó không thể truy cập vào để gọi được
+
+Vì vậy, ta sẽ tạo 1 `script` riêng để chứa `logic` hồi sinh người chơi, đặt tên `LevelManager`, `script` này
+có `scope` lớn nhất trong tất cả những `script` ta đã tạo.
+
+Tiếp theo, ta cần gắn `script` này vào 1 `game object` để hệ thống có thể chạy `script` này. Do đó, ta tạo
+1 `empty game object` tên `Level Manager` rồi gắn `script` này vào.
+
+![Level Manager](md_assets/levelmanager.png)
+
+Chỉ có duy nhất 1 `LevelManager` tồn tại trong mỗi `Scene`, do đó ta áp dụng mẫu `singleton`
+
+```csharp
+public class LevelManager : MonoBehaviour
+{
+    public static LevelManager instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    // Start is called before the first frame update
+    void Start() { }
+
+    // Update is called once per frame
+    void Update() { }
+}
+```
+
+Tiếp theo, ta cần lưu trữ 1 biến, biến này có nhiệm vụ `delay` thời gian hồi sinh của người chơi.
+Trong thời gian `delay` này, ta có thể thông báo cho người chơi biết lý do họ chết,...
+
+Tạo phương thức `RespawnPlayer` chịu trách nhiệm hồi sinh người chơi, phần `logic` `deactive` `Player` và
+`active` `Player` cũng được chuyển vào phương thức này
+
+Tại phương thức `DealDamage`, khi người dùng hết `heart`, ta sẽ gọi phương thức `RespawnPlayer`, đồng thời
+xóa phần `logic` `deactive` `Player` tại đây (do logic này đã được chuyển vào phương thức `RespawnPlayer`)
+
+```csharp
+public void DealDamage()
+{
+    if (invincibleCounter <= 0)
+    {
+        currentHealth -= 1;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            // gameObject.SetActive(false);
+
+            LevelManager.instance.RespawnPlayer();
+        }
+        else
+        {
+            invincibleCounter = invincibleLength;
+            theSR.color = new Color(theSR.color.r, theSR.color.g, theSR.color.b, 0.5f);
+
+            PlayerController.instance.KnockBack();
+        }
+
+        UIController.instance.UpdateHealthDisplay();
+    }
+}
+```
+
+Khi phương thức `RespawnPlayer` được gọi, ta sẽ làm 1 số thao tác liên quan đến việc hồi sinh của `Player`, bao gồm:
+
+- Đặt trạng thái `Player` thành `active`
+- Đưa `Player` về vị trí hồi sinh (có thể là vị trí khi người chơi mới vào game, hoặc vị trí của 1 `Checkpoint`)
+- Đặt lại số lượng `heart` trên `PlayerHealthController`
+- Hiển thị lại số lượng `heart` trên giao diện thông qua `UIController`
+
+Tuy nhiên, tất cả những điều này chỉ xảy ra sau khi quãng thời gian `waitToRespawn` kết thúc, ta cần tìm 1 giải pháp
+để đếm ngược thời gian
+
+Trước đây, ta khai báo thêm 1 biến `waitToRespawnCounter`, sau mỗi `frame update`, ta trừ giá trị của biến này
+đi 1 đơn vị `Time.deltaTime`, đến khi biến này có giá trị `0` thì thực thi danh sách công việc bên trên
+
+Tuy nhiên, trong lần này, ta sẽ dùng kĩ thuật khác
+
+- Tạo 1 `coroutine` chạy bên ngoài `thread` chính
+- `coroutine` này đầu tiên sẽ `deactive` `Player`
+- Gọi phương thức `WaitForSeconds` để `delay` dựa trên giá trị của `waitToRespawn`
+- Sau khi thời gian `delay` hết, tiến hành `active Player`
+- Cuối cùng, thực hiện toàn bộ công việc đã liệt kê ở trên để hồi sinh `Player`
+
+  ```csharp
+    public IEnumerator RespawnCo()
+    {
+        PlayerController.instance.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(waitToRespawn);
+
+        PlayerController.instance.gameObject.SetActive(true);
+
+        PlayerController.instance.transform.position = CheckpointController.instance.spawnPoint;
+        PlayerHealthController.instance.currentHealth = PlayerHealthController.instance.maxHealth;
+        UIController.instance.UpdateHealthDisplay();
+    }
+  ```
+
+Lúc này, ta đã có chức năng `Respawn Player`
+
+```csharp
+public class LevelManager : MonoBehaviour
+{
+    public static LevelManager instance;
+
+    public float waitToRespawn;
+
+    private void Awake() { instance = this; }
+
+    void Start() { }
+    void Update() { }
+
+    public void RespawnPlayer()
+    {
+        StartCoroutine(RespawnCo());
+    }
+
+    public IEnumerator RespawnCo()
+    {
+        PlayerController.instance.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(waitToRespawn);
+
+        PlayerController.instance.gameObject.SetActive(true);
+
+        PlayerController.instance.transform.position = CheckpointController.instance.spawnPoint;
+        PlayerHealthController.instance.currentHealth = PlayerHealthController.instance.maxHealth;
+        UIController.instance.UpdateHealthDisplay();
+    }
+}
+```
+
+Ghi chú: `coroutine` có vẻ tương đồng như `thread`, tuy nhiên có thể thoải mái truy cập đến những thứ
+có mặt trong `thread UI` chính (`PlayerController`, `PlayerHealthController`, `UIController`) mà không
+sợ bị lỗi truy cập chéo luồng như trong `winform` ???

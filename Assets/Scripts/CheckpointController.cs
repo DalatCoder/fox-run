@@ -19,6 +19,8 @@ public class CheckpointController : MonoBehaviour
     void Start()
     {
         checkpoints = FindObjectsOfType<Checkpoint>();
+
+        spawnPoint = PlayerController.instance.transform.position;
     }
 
     // Update is called once per frame
