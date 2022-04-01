@@ -2204,3 +2204,146 @@ private void OnTriggerEnter2D(Collider2D other)
 ```
 
 ![Gem](md_assets/displaygem.png)
+
+### 6.4. Adding a Pickup Effect
+
+Lúc này, người chơi đã có thể thu thập được `heart` và `gem`. Tuy nhiên, sau khi thu thập xong lại
+chẳng có bất kì hiệu ứng gì cả. Ta muốn có thêm 1 chút hiệu ứng để game trở nên sinh động hơn.
+
+#### 6.4.1. Tạo `animation`
+
+- Vào thư mục `assets/2D Platformer Assets/Graphics/Collectibles`, kéo đối tượng `Collect_Effect` vào `Scene`
+- Đặt tên `game object` vừa được tạo là `Pickup Effect`
+- Chọn `Pickup Effect`, vào `Animation` để tạo 1 hiệu ứng mới
+- Lưu hiệu ứng vào thư mục `animations`
+
+![Pickup effect](md_assets/pickupeffect.png)
+
+Chúng ta không muốn hiệu ứng này lặp lại liên tục, hiệu ứng này chỉ cần xuất hiện duy nhất 1 lần rồi biến mất.
+Và sau khi nó hiển thị xong thì lập tức bị `destroy` khỏi `Scene` hiện tại.
+
+Đầu tiên, để `animation` này kéo dài khoảng 1 giây, kéo `sprite` bất kỳ để vào
+vị trí `1`
+
+![Animation 1](md_assets/animation1.png)
+
+Tiếp theo, đặt con trỏ tại vị trí giây `20`, bấm vào nút `record`, tick chọn tắt `Sprite Renderrer`,
+lại bấm vào nút `record` để tắt chức năng này đi.
+
+Lúc này ta sẽ được hiệu ứng khá đẹp, hiệu ứng nổ ra rồi tan biến đi
+
+![Animation 2](md_assets/ani2.png)
+
+#### 6.4.2. Tạo `script` để hiệu ứng tự động biến mất sau 1 khoảng thời gian
+
+Tiếp theo, ta cần 1 giải pháp để làm cho `Pickup_Effect` biến mất sau 1 khoảng thời gian `t`.
+
+- Tạo 1 `script` mới, đặt tên `DestroyOverTime`
+- Mục đích: trì hoãn 1 khoảng thời gian `t`, sau đó xóa đối tượng `game object` ra khỏi `Scene` hiện tại
+- Để trì hoãn thời gian
+
+  - Khai báo biến `public float lifeTime` lưu trữ thời gian trì hoãn
+  - Sau mỗi `frame update`, ta trừ giá trị biến này đi 1 lượng `Time.deltaTime`
+  - Nếu giá trị biến này nhỏ hơn hoặc bằng 0, ta gọi hàm `destroy` để xóa bỏ đối tượng
+  - Bởi vì đối tượng sẽ bị xóa nên ta có thể trực tiếp trừ thẳng vào `lifeTime` mà không cần phải tạo thêm biến `counter`
+
+- Cách ngắn hơn để vừa xóa vừa trì hoãn thời gian
+
+  - Gọi hàm `destroy`
+  - Truyền vào `gameObject` (`this`)
+  - Truyền vào tham số thời gian trì hoãn `lifeTime`
+
+```csharp
+public class DestroyOverTime : MonoBehaviour
+{
+    public float lifeTime;
+
+    // Start is called before the first frame update
+    void Start() { }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Destroy(gameObject, lifeTime);
+    }
+}
+```
+
+Chọn đối tượng `Pickup Effect`, chọn `Add` và gõ `Destroy Over Time` để thêm script này vào.
+Sau đó đặt thời gian trì hoãn, ta thấy hiệu ứng xuất hiện rồi biến mất tức thì
+
+![Pickup Effect](md_assets/addscript.png)
+
+#### 6.4.3. Tạo `Prefab` để tái sử dụng đối tượng `animation` này
+
+- Vào `folder` `Prefabs`
+- Tạo `folder` con để chứa hiệu ứng, đặt tên `Effects`
+- Kéo đối tượng `Pickup Effect` tại cửa sổ `Hierarchy` vào `folder` này
+
+![Prefab](md_assets/prefabpickup.png)
+
+#### 6.4.4. Cập nhật `Pickup script` để khi người dùng nhặt vật phẩm thì hiển thị `Pickup Effect`
+
+- Quay lại `Pickup script`
+- Tạo tham chiếu đến đối tượng chứa hiệu ứng: `public GameObject pickupEffect;`
+- Gọi phương thức `Instantiate` để tạo 1 bản `clone` của đối tượng `pickupEffect`
+
+  - Truyền vào đối tượng muốn `clone`
+  - Vị trí đối tượng được tạo ra, truyền `transform.position` vào (`position` của `gem` hoặc `heart` hiện tại)
+  - Truyền vào thông số liên quan đến xoay vật thể `transform.rotation` (`rotation` của `gem` hoặc `heart` hiện tại)
+
+    ```csharp
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!other.CompareTag("Player")) return;
+            if (isCollected) return;
+
+            if (isGem)
+            {
+                LevelManager.instance.gemsCollected++;
+                isCollected = true;
+
+                Destroy(gameObject);
+
+                Instantiate(pickupEffect, transform.position, transform.rotation);
+
+                UIController.instance.UpdateGemCount();
+            }
+
+            if (isHeal)
+            {
+                if (PlayerHealthController.instance.currentHealth >= PlayerHealthController.instance.maxHealth) return;
+                PlayerHealthController.instance.HealPlayer();
+                isCollected = true;
+
+                Destroy(gameObject);
+
+                Instantiate(pickupEffect, transform.position, transform.rotation);
+            }
+        }
+    ```
+
+Quay lại giao diện, chọn `Gem`, `Gem 1`, `Gem 2`, `Cherry` rồi gắn đối tượng `Pickup Effect` từ `Prefab` vào
+phần `Pickup Effect` tại `script`.
+
+Sau đó chạy thử, lúc này hiệu ứng diễn ra rất đẹp.
+
+![Done](md_asset/aniamtion.png)
+
+#### 6.4.5. cập nhật `sorting layer` và tạo 1 số `prefabs`
+
+Thêm 1 số `sorting layer`
+
+- `World`: `Checkpoint` (update)
+- `Pickups`: `Gem` & `Cherry`
+- `Effects`
+- `Enemies`
+
+![Sorting Layer](md_assets/sortinglayer1.png)
+
+Tạo 1 số `prefabs` để tái sử dụng
+
+Tạo `folder` `Pickups` trong thư mục `Prefabs`
+
+- Kéo `Gem` vào
+- Kéo `Cherry` vào
