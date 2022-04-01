@@ -8,6 +8,8 @@ public class CheckpointController : MonoBehaviour
 
     private Checkpoint[] checkpoints;
 
+    public Vector3 spawnPoint;
+
     private void Awake()
     {
         instance = this;
@@ -31,5 +33,10 @@ public class CheckpointController : MonoBehaviour
         {
             checkpoints[i].ResetCheckPoint();
         }
+    }
+
+    public void SetSpawnPoint(Vector3 newSpawnPoint)
+    {
+        spawnPoint = newSpawnPoint;
     }
 }

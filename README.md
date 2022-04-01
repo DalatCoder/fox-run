@@ -1798,3 +1798,37 @@ private void OnTriggerEnter2D(Collider2D other)
 Lúc này, ta đã đảm bảo được việc chỉ có duy nhất 1 `checkpoint` được `active` trong mỗi `scene`
 
 ![Done](md_assets/checkpoints1.png)
+
+### 5.3. Storing Spawn Position
+
+Ta cần phải có 1 giải pháp để lưu trữ vị trí hồi sinh của nhân vật.
+
+Tại `CheckpointController script`, tạo 1 `vector3` để lưu giữ vị trí (`unity` dùng cái này để xác định vị trí 1 điểm)
+
+- Khai báo biến lưu giữ vị trí: `public Vector3 spawnPoint`
+- Định nghĩa phương thức thay đối giá trị của biến trên
+
+  ```csharp
+    public void SetSpawnPoint(Vector3 newSpawnPoint)
+    {
+        spawnPoint = newSpawnPoint;
+    }
+  ```
+
+Phương thức `SetSpawnPoint` sẽ được gọi khi người chơi đi qua 1 điểm `Checkpoint` bất kỳ. Tại đây,
+ta truyền vào địa chỉ của đối tượng `Checkpoint` là được. Để truy cập vào các thông số tọa độ, `unity`
+đã `inject` sẵn biến `transform`
+
+```csharp
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (!other.CompareTag("Player")) return;
+
+    CheckpointController.instance.DeactivateCheckpoints();
+    theSR.sprite = checkPointOn;
+
+    CheckpointController.instance.SetSpawnPoint(transform.position);
+}
+```
+
+![Image](md_assets/storingspawnpoint.png)
