@@ -2347,3 +2347,71 @@ Tạo `folder` `Pickups` trong thư mục `Prefabs`
 
 - Kéo `Gem` vào
 - Kéo `Cherry` vào
+
+### 6.5. Showing Player Death Effect
+
+Ta đã thêm hiệu ứng khi người chơi nhặt vật phẩm `Pickup Effect`, bây giờ ta sẽ thêm
+hiệu ứng khi người chơi chết. Hiện tại, khi hết `heart`, người chơi chỉ bị `deactive`,
+tạm thời biến mất trên `Scene`.
+
+Tạo hiệu ứng:
+
+- Vào thư mục `assets/2D Platformer Assets/Graphics/Enemies`
+- Chọn hiệu ứng chết của `Enemy`
+- Kéo 1 `sprite` vào `Hierarchy` để tạo 1 `game object`, đặt tên `Death Effect`
+- Mở cửa sổ `Animation`
+- Tạo 1 `animation` mới, đặt tên `Death_Effect` và lưu vào `assets/Animations`
+
+    ![Death Effect](md_assets/deatheffect1.png)
+
+- Đặt con trỏ tại ví trí giây thứ `1` và bấm `record`
+- Tắt `Sprite Renderrer`
+- Kéo điểm tại vị trí giây `1` về vị trí giây `35`
+- Kéo `sprite` cuối cùng ra vị trí giây `1` để kéo dài `animation`
+
+    ![Death Effect](md_assets/deatheffect2.png)
+
+Thêm `script` tự động `Destroy` sau 1 khoảng thời gian: `Destroy Over Time`, đặt thời gian `.75`
+
+Kéo `Death_Effect` vào thư mục `Prefabs/Effects`
+
+Đặt `sorting layer` thành `Effects`
+
+Tạo tham chiếu đối tượng `Death_Effect` này vào `Player`, vậy bây giờ phải kết nối đến `script` nào? (bởi vì `Player` có nhiều `script` đi kèm)
+
+Vậy khi nào thì hiển thị `Death_Effect`
+
+- Khi người dùng rơi xuống vực ???
+- Khi người dùng hết `heart` ???
+
+Chỉ khi người dùng hết `heart` (va vật cản, gặp `enemy`) thì ta mới hiển thị hiệu ứng `Death_Effect`,
+mà phần `script` kiểm soát `heart` nằm ở `PlayerHealthController`. Do đó, trong `script` này
+ta tạo tham chiếu đến `Death_Effect` và chịu trách nhiệm hiển thị hiệu ứng này.
+
+```csharp
+public void DealDamage()
+{
+    if (invincibleCounter <= 0)
+    {
+        currentHealth -= 1;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            Instantiate(deathEffect, transform.position, transform.rotation);
+            LevelManager.instance.RespawnPlayer();
+        }
+        else
+        {
+            invincibleCounter = invincibleLength;
+            theSR.color = new Color(theSR.color.r, theSR.color.g, theSR.color.b, 0.5f);
+
+            PlayerController.instance.KnockBack();
+        }
+
+        UIController.instance.UpdateHealthDisplay();
+    }
+}
+```
+
+![Death Effect](md_assets/deatheffect3.png)
