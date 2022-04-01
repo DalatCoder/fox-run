@@ -2010,3 +2010,82 @@ public class KillPlayer : MonoBehaviour
     }
 }
 ```
+
+## 6. Pickups
+
+Ta sẽ thêm hệ thống vật phẩm vào game để người chơi có thể nhặt lên, có thể kể đến như:
+
+- `gem`
+- `heart`
+
+### 6.1. Collecting gems
+
+Vào `assets/2D Platformer Assets/Graphics/Collectibles`, chọn 1 `sprite gem` rồi kéo vào `Scene` để tạo 1 `game object`
+
+#### 6.1.1. Tạo `gems` animation
+
+- Chọn `game object` `Gem`
+- Vào cửa sổ `Animation`
+- Chọn `create` để tạo mới 1 `animation`
+- Đặt tên `Gem_Pickup` và lưu vào thư mục `assets/Animations`
+
+![Gem](md_assets/gempickup.png)
+
+#### 6.1.2. Bọc `collider` để `Player` có thể tương tác
+
+- Chọn `Gem` `game object`
+- `Add component` `Circle Collider 2D`
+- Tick vào thuộc tính `Trigger`
+
+![Gem collider](md_assets/gemcollider.png)
+
+#### 6.1.3. Tạo `script` để xử lý `collision`
+
+- Vào thư mục `assets`
+- Tạo `script` đặt tên `Pickup`
+- Gắn `script` này vào đối tượng `Gem`
+
+![Script](md_assets/gemscript.png)
+
+#### 6.1.4. Viết `script`
+
+Đoạn `script` này cần được dùng lại nhiều lần cho các vật phẩm khác ngoài `gem`, ví dụ như `heart`, `coin`.
+Do đó, chúng ta phải viết như nào để có thể tái sử dụng được cho những vật phẩm này.
+
+- Để xác định đối tượng gắn với `script` này là `gem`, ta tiến hành tạo 1 biến `bool` để lưu trạng thái: `isGem`
+- Khai báo biến `gemsCollected` tại `LevelManager` `script` để lưu trữ số lượng `gem` hiện thời đã thu thập
+- `override` hàm xử lý `collision` `OnTriggerEnter2D`
+- Trong hàm này ta cộng giá trị của biến `gemsCollected++`
+- Lưu ý: trong trường hợp `Player` được bọc bởi `n` `collider`, phương thức `OnTriggerEnter2D` sẽ được
+thực thi `n` lần, do đó `gemsCollected` cũng sẽ được cộng thêm `n` lần. Để tránh trường hợp này xảy ra,
+ta khai báo biến `bool` `isCollected` để kiểm tra.
+
+Sau khi `gem` đã được người chơi thu thập, ta `Destroy` `game object` này luôn chứ không dùng cơ chế `deactive` như của `Player`.
+Phương thức `Destroy` chỉ được gọi sau khi `frame` kết thúc (giống như cú pháp `defer` của `golang`), do đó chúng
+ta vẫn cần biến `isCollected` để kiểm tra.
+
+```csharp
+public class Pickup : MonoBehaviour
+{
+    public bool isGem;
+
+    private bool isCollected;
+
+    void Start() { }
+    void Update() { }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        if (isCollected) return;
+
+        if (isGem) LevelManager.instance.gemsCollected++;
+
+        isCollected = true;
+
+        Destroy(gameObject);
+    }
+}
+```
+
+![Gem Collected](md_assets/gemcollective.png)
