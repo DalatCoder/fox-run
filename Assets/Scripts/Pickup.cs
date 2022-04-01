@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-    public bool isGem;
+    public bool isGem, isHeal;
 
     private bool isCollected;
 
@@ -25,10 +25,23 @@ public class Pickup : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         if (isCollected) return;
 
-        if (isGem) LevelManager.instance.gemsCollected++;
+        if (isGem)
+        {
+            LevelManager.instance.gemsCollected++;
+            isCollected = true;
 
-        isCollected = true;
+            Destroy(gameObject);
 
-        Destroy(gameObject);
+            UIController.instance.UpdateGemCount();
+        }
+
+        if (isHeal)
+        {
+            if (PlayerHealthController.instance.currentHealth >= PlayerHealthController.instance.maxHealth) return;
+            PlayerHealthController.instance.HealPlayer();
+            isCollected = true;
+
+            Destroy(gameObject);
+        }
     }
 }

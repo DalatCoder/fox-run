@@ -2089,3 +2089,118 @@ public class Pickup : MonoBehaviour
 ```
 
 ![Gem Collected](md_assets/gemcollective.png)
+
+### 6.2. Health Pickup
+
+Nhặt `heart` hồi phục máu (`cherry`)
+
+Các bước thực hiện y hệt như phần `gem pickup`
+
+- Kéo `sprite cherry` vào `Scene` để tạo thành 1 `game object`
+- Bọc `circle collider 2d`
+- Gắn `script Pickup` vào và tick vào lựa chọn `isHeal`
+
+Xử lý logic hồi phục người dùng
+
+- Tạo phương thức `HealPlayer` tạo `PlayerHealthController`
+
+  - Cộng `2` điểm vào `currentHealth`
+  - Nếu `currentHealth > maxHealth` thì đặt `currentHealth = maxHealth`
+  - Gọi phương thức `UpdateHealthDisplay` để cập nhật lại giao diện
+
+  ```csharp
+    public void HealPlayer()
+    {
+        currentHealth += 2;
+
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+
+        UIController.instance.UpdateHealthDisplay();
+    }
+  ```  
+
+- Tại `Pickup script`, khi xảy ra `collision`, ta làm 1 số bước kiểm tra và gọi phương thức `HealPlayer` để hồi phục người chơi
+
+  ```csharp
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        if (isCollected) return;
+
+        if (isGem)
+        {
+            LevelManager.instance.gemsCollected++;
+            isCollected = true;
+
+            Destroy(gameObject);
+        }
+
+        if (isHeal)
+        {
+            if (PlayerHealthController.instance.currentHealth >= PlayerHealthController.instance.maxHealth) return;
+            PlayerHealthController.instance.HealPlayer();
+            isCollected = true;
+
+            Destroy(gameObject);
+        }
+    }
+  ```
+
+### 6.3. Adding Gems to UI
+
+Vẽ giao diện trên `Canvas`
+
+- Chọn `Canvas game object`
+- `Duplicate` 1 `heart` rồi kéo về góc phải, đồng thời neo vào góc phải. Thay ảnh của `gem` vào.
+- Tạo thêm 1 đối tượng `UI` là `text`, kéo vào vị trí bên cạnh `gem`
+- Chọn phông chữ đi kèm với dự án trong thư mục `assets/2D Platformer Assets/Font`
+- Chọn màu chữ thành trắng
+- Thêm `outline` cho chữ để dễ nhìn, độ dày của `x, y` đều là `3` (`add component`)
+
+![Gem UI](md_assets/gemui.png)
+
+Tiếp theo, ta cần viết `logic` xử lý việc hiển thị số lượng `Gem` tại `UIController`
+
+- Tạo tham chiếu đến đối tượng `Gem Text` trên `Canvas`
+- Cập nhật thuộc tính `text` trên đối tượng này bằng giá trị tại `LevelManager.instance.gemsCollected`
+
+    ```csharp
+        public UnityEngine.UI.Text gemText;
+
+        public void UpdateGemCount()
+        {
+            gemText.text = LevelManager.instance.gemsCollected.ToString();
+        }
+    ```
+
+Ta sẽ gọi phương thức `UpdateGemCount` khi `Player` thu thập `gem`
+
+```csharp
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (!other.CompareTag("Player")) return;
+    if (isCollected) return;
+
+    if (isGem)
+    {
+        LevelManager.instance.gemsCollected++;
+        isCollected = true;
+
+        Destroy(gameObject);
+
+        UIController.instance.UpdateGemCount();
+    }
+
+    if (isHeal)
+    {
+        if (PlayerHealthController.instance.currentHealth >= PlayerHealthController.instance.maxHealth) return;
+        PlayerHealthController.instance.HealPlayer();
+        isCollected = true;
+
+        Destroy(gameObject);
+    }
+}
+```
+
+![Gem](md_assets/displaygem.png)
