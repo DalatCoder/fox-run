@@ -1683,3 +1683,118 @@ Tiếp theo, ta cần tạo `logic` kích hoạt `checkpoint` (thay đổi `spri
 - Kéo đối tượng `Checkpoint` vào `Prefabs` để tái sử dụng ở những `Level` (địa hình, bản đồ) khác
 
 ![Checkpoint](md_assets/checkpointstate.png)
+
+### 5.2. Deactivating Checkpoints
+
+Trong 1 `level` sẽ có nhiều điểm `checkpoint` cho người chơi, tuy nhiên chỉ có 1 điểm mang trạng thái `on`,
+các điểm còn lại đều phải mang trạng thái `off`. Dựa vào điểm `checkpoint on` duy nhất này để chúng ta
+biết vị trí hồi sinh người chơi.
+
+Tạo 1 phương thức trên script `Checkpoint` hiện tại để `deactive`
+
+```csharp
+  public void ResetCheckPoint()
+  {
+      theSR.sprite = checkPointOff;
+  }
+```
+
+Mỗi đối tượng `Checkpoint` đều được gắn vào đoạn `script CheckPoint`. Đoạn `script` này bao gồm:
+
+- Phương thức `active` khi người chơi đi qua `Checkpoint`
+- Phương thức `reset` để đặt trạng thái `off`.
+
+1 `level` có thể có nhiều `Checkpoint`, lúc này ta sẽ tạo ra 1 `empty game object`, đặt tên `CheckpointController`,
+sau đó, gắn `game object` này với 1 đoạn `script` tên `CheckpointController`, `script` này chịu trách
+nhiệm kiểm soát tất cả các `Checkpoint` đang có mặt trên `Level`
+
+![Checkpoint Controller](md_assets/checkpointcontroller.png)
+
+Tiếp theo, ta cần thêm 1 số `logic` cho `script` này
+
+- Bởi vì chỉ có duy nhất 1 `CheckpointController` tồn tại trong mỗi `level`, do đó, ta dùng mẫu
+`singleton` để dễ dàng truy cập
+- Cần 1 mảng các đối tượng `Checkpoint`, mảng này chứa tất cả `Checkpoint` hiện đang có trên `level`
+
+```csharp
+public class CheckpointController : MonoBehaviour
+{
+    public static CheckpointController instance;
+
+    public Checkpoint[] checkpoints;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    // Start is called before the first frame update
+    void Start() { }
+
+    // Update is called once per frame
+    void Update() { }
+}
+```
+
+![Checkpoints](md_assets/checkpoints.png)
+
+Bằng việc khai báo `public`, ta có thể tùy ý kéo danh sách các `checkpoint` đang có trên `scene`
+vào. Tuy nhiên, khi số lượng `checkpoint` lớn thì sẽ dễ gây ra nhầm lẫn, do đó lúc này ta sẽ
+đặt `private` và tìm giải pháp khác để lấy được danh sách `checkpoint` đang có trên `scene`
+
+Phương thức `FindObjectsOfType` tìm tất cả `game object` có kiểu dữ liệu đã truyền vào. Và chỉ
+tìm những `game object` có trạng thái `active`.
+
+```csharp
+public class CheckpointController : MonoBehaviour
+{
+    public static CheckpointController instance;
+
+    private Checkpoint[] checkpoints;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        checkpoints = FindObjectsOfType<Checkpoint>();
+    }
+
+    // Update is called once per frame
+    void Update() { }
+}
+```
+
+Tạo phương thức để `reset` trạng thái của tất cả `checkpoint` đang có trên `scene`
+
+```csharp
+  public void DeactivateCheckpoints()
+  {
+      for (int i = 0; i < checkpoints.Length; i++)
+      {
+          checkpoints[i].ResetCheckPoint();
+      }
+  }
+```
+
+Sau đó, quay lại `Checkpoint script` lúc đầu. Khi người dùng đi vào vùng `collision` của 1 `checkpoint`.
+
+- Gọi phương thức `DeactivateCheckpoints` để `reset` tất cả `checkpoint`
+- `active` Checkpoint mà người dùng vừa đi vào
+
+```csharp
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (!other.CompareTag("Player")) return;
+
+    CheckpointController.instance.DeactivateCheckpoints();
+    theSR.sprite = checkPointOn;
+}
+```
+
+Lúc này, ta đã đảm bảo được việc chỉ có duy nhất 1 `checkpoint` được `active` trong mỗi `scene`
+
+![Done](md_assets/checkpoints1.png)
