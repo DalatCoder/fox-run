@@ -1978,3 +1978,35 @@ public class LevelManager : MonoBehaviour
 Ghi chú: `coroutine` có vẻ tương đồng như `thread`, tuy nhiên có thể thoải mái truy cập đến những thứ
 có mặt trong `thread UI` chính (`PlayerController`, `PlayerHealthController`, `UIController`) mà không
 sợ bị lỗi truy cập chéo luồng như trong `winform` ???
+
+### 5.5. Kill the player outside health system
+
+Khi người chơi rớt xuống khỏi khu vực địa hình, ta không để `Player` rơi 1 cách vĩnh viễn như
+vậy mà phải tìm 1 cơ chết để `deactive` `Player` và sau đó hồi sinh lại.
+
+Ta có thể kiểm tra tọa độ `y` của `Player` sau mỗi `frame update`,
+nếu `y` vượt quá mốc nào đó thì `deactive` rồi `respawn`.
+
+Tuy nhiên có cách khác dễ hơn nữa
+
+- Tạo 1 `game object` rỗng, đặt tên `KillPlane`
+- Kéo nó xuống dưới đáy của địa hình
+- Gán `box collider 2d` vào `game object` này, kéo dài `collider` sao cho nó trải dài hết cả địa hình (xem hình)
+- Gán `script` để xác định `collision`, đặt tên là `KillPlayer`
+- Khi `collision` diễn ra thì gọi phương thức `respawn`
+
+![Kill Player](md_assets/killplayer.png)
+
+```csharp
+public class KillPlayer : MonoBehaviour
+{
+    void Start() { }
+    void Update() { }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        LevelManager.instance.RespawnPlayer();
+    }
+}
+```
