@@ -2776,3 +2776,22 @@ private void OnTriggerEnter2D(Collider2D other)
     Instantiate(deathEffect, other.transform.position, other.transform.rotation);
 }
 ```
+
+### 7.9. Boucing on enemy
+
+Khi nhảy lên đầu con cóc và tiêu diệt nó, người chơi cũng sẽ nhảy lên 1 chút. Người chơi có thể tận dụng điều này
+để nhảy lên cao hơn.
+
+Tại `PlayerController` script, ta thêm 1 số thứ
+
+- `bounceForce`: lực nhảy lên
+- `Bouce()`: phương thức được gọi để nhảy lên
+
+```csharp
+public void Bounce()
+{
+    theBD.velocity = new Vector2(theBD.velocity.x, bounceForce);
+}
+```
+
+Tại `Stompbox` script, ngay hàm va chạm, ta gọi thêm phương thức `Bounce()` để người chơi nhảy lên 1 tí.
