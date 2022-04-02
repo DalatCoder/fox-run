@@ -2659,3 +2659,57 @@ void Update()
 ```
 
 Hàm `Move` tương tự như lúc đầu, còn hàm `Pause` thì chỉ cần đặt `x` trong `velocity` về `0` là được.
+
+### 7.5. Animating Enemy Movement
+
+Tạo hiệu ứng nhảy cho con ếch, lúc này sẽ thấy được việc tạo `animation` bằng `record` và tại sao việc
+bọc `sprite` vào `holder` lại quan trọng.
+
+- Chọn đối tượng `holder`
+- Vào cửa sổ `Animation`, tạo 1 `animation` mới, đặt tên `Frog_Jump`
+- Bật chế độ `record`, chọn vào đối tượng `Sprite` con
+- Kéo các `frame` vào lần lượt như hình dưới đây
+
+![Frog](md_assets/frog6.png)
+
+Lúc này, `animation` của con ếch diễn ra hiệu ứng nhảy ngay tại chỗ, nhìn khá phèn.
+
+Bây giờ, ta sẽ dùng `record` để ghi lại việc thay đổi `position` của con ếch, qua việc này cũng
+thấy rõ hơn tác dụng của việc bọc `holder` bên ngoài `sprite`
+
+- Để con trỏ tại giây thứ 10 trên cửa sổ `timeline` (lúc con ếch chạm đất)
+- Dùng công cụ `move` kéo con ếch lên cao theo trục `y` (di chuyển `sprie`, không di chuyển `holder`)
+- Đặt con trỏ vào `frame` đầu tiên, đặt `y=0`, đặt con trỏ vào `frame` cuối cùng, đặt `y=0`
+
+![Frog](md_assets/frog7.png)
+
+Lúc này ta đã có con ếch nhảy lên nhảy xuống khá đẹp
+
+- Đưa `frame` ếch vào
+- Kéo `y` cho phù hợp
+  - `frame` giữa kéo `y` lên cao nhất để tạo hiệu ứng nhảy lên
+  - `frame` đầu với `frame` cuối đặt `y=0` để làm hiệu ứng nhảy lên và hạ xuống
+  - căn chỉnh `y` của 1 số `frame` sao cho chân con ếch không bị lún vào trong đất
+
+- Việc `record` cả `position` của con ếch như này hệt như lúc demo bên bài hiệu ứng `Pick_Effect`
+
+  - `Pickup_Effect` có vị trí tương đối với đối tượng `Scene`. Do đó, khi dùng `position` làm hiệu ứng thì nó hoạt động không ổn lắm.
+  - `Frog_Jump` có vị trí tương đối với đối tượng `holder` bọc bên ngoài. Do đó, `position` của `Frog_Jump` tương đối với vị
+    trí hiện tại của `holder`. Ta có thể thoải mái đặt `holder` ở bất kì chỗ nào trong `Scene`, hiệu ứng `Frog_Jump` sẽ đi theo tương ứng.
+
+Tiếp theo, ta tiến hành vào cửa sổ `Animator` để cấu hình việc chuyển đổi `animation` giữa `Frog_Idle` và `Frog_Jump`
+
+- Tạo biến `bool isMoving` để lưu trữ trạng thái di chuyển hay đứng yên
+- Tạo `transition` giữa `Frog_Jump` và `Frog_Idle`
+  - Bỏ tick `Has exit time`
+  - Đặt `duration time` bằng `0`
+  - Điều kiện chuyển cảnh dựa vào biến `isMoving`
+
+![Frog](md_assets/frog8.png)
+
+Quay lại `script`, tạo tham chiếu đến đối tượng `Animator`
+
+- Hàm `move` đặt giá trị `isMoving = true`, chuyển sang `animation Frog_Jump`
+- Hàm `pause` đặt giá trị `isMoving = false`, chuyển sang `animation Frog_Idle`
+
+Lúc này ta đã có hiệu ứng con ếch nhảy qua nhảy lại khá sinh động

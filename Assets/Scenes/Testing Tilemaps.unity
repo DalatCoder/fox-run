@@ -748,6 +748,8 @@ MonoBehaviour:
   leftPoint: {fileID: 1425141574}
   rightPoint: {fileID: 162075414}
   theSR: {fileID: 260980185}
+  moveTime: 3
+  waitTime: 2
 --- !u!1001 &610634443
 PrefabInstance:
   m_ObjectHideFlags: 0

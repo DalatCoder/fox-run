@@ -15,10 +15,13 @@ public class EnemyController : MonoBehaviour
     public float moveTime, waitTime;
     private float moveCount, waitCount;
 
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
         theRB = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         leftPoint.parent = null;
         rightPoint.parent = null;
@@ -61,10 +64,13 @@ public class EnemyController : MonoBehaviour
 
             if (transform.position.x < leftPoint.position.x) moveRight = true;
         }
+
+        animator.SetBool("isMoving", true);
     }
 
     private void Pause()
     {
         theRB.velocity = new Vector2(0f, theRB.velocity.y);
+        animator.SetBool("isMoving", false);
     }
 }
