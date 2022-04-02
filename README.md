@@ -2415,3 +2415,44 @@ public void DealDamage()
 ```
 
 ![Death Effect](md_assets/deatheffect3.png)
+
+## 7. Making Enemies
+
+Một chút về `animation`
+
+Có 2 kiểu để làm `animation` trong `unity`
+
+- `Preview`: kéo từng `frame` ảnh bỏ vào
+- `Record`: có thể có `frame` ảnh, ngoài ra còn ghi lại được 1 số thứ khác
+
+Trong dự án này, có 1 số hiệu ứng ta làm thông qua `preview`, kể đến như:
+
+- `animation` của `Player`: `Idle`, `Jump`, `Run`, `Hurt`
+- `animation` của `Gem`
+
+Một số hiệu ứng khác lại làm thông qua `record`:
+
+- Hiệu ứng khi nhặt vật phẩm
+
+  - Tạo hiệu ứng ban đầu bằng các `frame` hình
+  - Ta không muốn hiệu ứng lặp lại, tới giây tới 30 thì hiệu ứng phải biến mất, tuy nhiên trong `sprite` không có hình nào biến mất hẳn
+    để thêm vào `frame`
+  - Dùng phương pháp `record`, tại giây thứ `30` ta tắt `component` `Sprite Renderrer`, như vậy trước giây 30 hiệu ứng vẫn hoạt động
+    bình thường nhưng kể từ giây 30 thì mọi thứ biến mất
+  - Để dùng hiệu ứng, ta chỉ cần đặt thời gian biến mất cho hiệu ứng ngoài `frame` thứ 30 là được (0.5 giây)
+
+- Hiệu ứng khi người chơi chết: tương tự như trên
+
+Khi tạo hiệu ứng dùng phương pháp `record`, trong quá trình có thể di chuyển `position` của `sprite` `animation` hiện tại.
+Tuy nhiên, khi đưa đối tượng có `animation` này vào `Scene`, bất kể đặt đối tượng ở vị trí nào thì `animation` luôn bắt
+đầu tại vị trí được vẽ trong cửa số `Animation` lúc đầu.
+
+Do đó, ở chương 7 này, khi làm hiệu ứng cho con cóc `Frog`. Ông chú đã cố ý bọc `sprite` vào bên trong 1 `empty game object`.
+
+- Quá trình tạo hiệu ứng diễn ra hoàn toàn trên đối tượng `sprite` con
+- Ta tùy ý dùng tính năng `record`, di chuyển `position` của `sprite` này, tạo thành hiệu ứng nhảy chuyển động
+- Điểm bắt đầu của hiệu ứng này trở nên tương đối với đối tượng cha của nó, tức là đối tượng `emtpy game object`,
+không phải là toàn bộ `Scene` như lúc làm hiệu ứng nhặt vật phẩm (Xem lại video). Do đó, ta có thể tùy ý kéo đối tượng
+`empty game object` trên `Scene`, `animation` sẽ luôn tương đối với đối tượng `empty game object` này.
+
+### 7.1. Creating our first enemy
