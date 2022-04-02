@@ -2625,3 +2625,37 @@ void Update()
     }
 }
 ```
+
+### 7.4. Adding Pauses
+
+Bây giờ con cóc cứ chạy qua chạy lại liên tục, vậy không ổn lắm. Phải có thời gian di chuyển, thời
+gian nghỉ. Như vậy các hiệu ứng kết hợp lại mới đẹp được.
+
+Tạo 1 số biến cần thiết
+
+- `moveTime`: thời gian di chuyển
+- `moveCount`: đếm ngược về 0, khi về 0 thì chuyển sang trạng thái `wait`
+- `waitTime`: thời gian nghỉ
+- `waitCount`: đếm ngược về 0, khi về 0 thì chuyển sang trạng thái `move`
+
+```csharp
+void Update()
+{
+    if (moveCount > 0)
+    {
+        Move();
+        moveCount -= Time.deltaTime;
+
+        if (moveCount <= 0) waitCount = Random.Range(waitTime * 0.5f, waitTime * 1.5f);
+    }
+    else if (waitTime > 0)
+    {
+        Pause();
+        waitCount -= Time.deltaTime;
+
+        if (waitCount <= 0) moveCount = Random.Range(moveTime * 0.5f, moveTime * 1.5f);
+    }
+}
+```
+
+Hàm `Move` tương tự như lúc đầu, còn hàm `Pause` thì chỉ cần đặt `x` trong `velocity` về `0` là được.

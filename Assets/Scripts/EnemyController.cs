@@ -12,6 +12,9 @@ public class EnemyController : MonoBehaviour
 
     public SpriteRenderer theSR;
 
+    public float moveTime, waitTime;
+    private float moveCount, waitCount;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,10 +22,30 @@ public class EnemyController : MonoBehaviour
 
         leftPoint.parent = null;
         rightPoint.parent = null;
+
+        moveCount = moveTime;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        if (moveCount > 0)
+        {
+            Move();
+            moveCount -= Time.deltaTime;
+
+            if (moveCount <= 0) waitCount = Random.Range(waitTime * 0.5f, waitTime * 1.5f);
+        }
+        else if (waitTime > 0)
+        {
+            Pause();
+            waitCount -= Time.deltaTime;
+
+            if (waitCount <= 0) moveCount = Random.Range(moveTime * 0.5f, moveTime * 1.5f);
+        }
+    }
+
+    private void Move()
     {
         if (moveRight)
         {
@@ -38,5 +61,10 @@ public class EnemyController : MonoBehaviour
 
             if (transform.position.x < leftPoint.position.x) moveRight = true;
         }
+    }
+
+    private void Pause()
+    {
+        theRB.velocity = new Vector2(0f, theRB.velocity.y);
     }
 }
