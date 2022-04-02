@@ -2456,3 +2456,64 @@ không phải là toàn bộ `Scene` như lúc làm hiệu ứng nhặt vật ph
 `empty game object` trên `Scene`, `animation` sẽ luôn tương đối với đối tượng `empty game object` này.
 
 ### 7.1. Creating our first enemy
+
+Tạo `animation` cho con ếch `Frog`
+
+- Kéo `Frog Idle` vào `Scene`, đặt tên `Frog Sprite`
+- Bọc `sprite` trên bên trong 1 `empty game object`, đặt tên `Enemy Frog`
+
+![Frog](md_assets/frog1.png)
+
+Như hình trên, `Frog Sprite` là con của `Enemy Frog`, 2 phần tử đều có 2 đối tượng `transform` riêng biệt.
+Tuy nhiên, nếu đặt giá trị `x, y, z` của `Frog Sprite` lần lượt là `0, 0, 0` thì tâm của `Frog Sprite` trùng
+với tâm hiện tại của `Enemy Frog` (căn vị trí tương đối so với cha của nó, khá giống `absolute` và `relative` container trong `css`).
+
+Vì điểm này, ta có thể dùng tính năng `record` vẽ `animation` tẹt ga cho thằng `Frog Sprite` (làm mấy thứ như thay đổi `position`, tạo
+hiệu ứng nhảy lên nhảy xuống của con ếch) mà không sợ dính lỗi vị trí bắt đầu (xem lại bài hiệu ứng `Pickup`, có ví dụ về lỗi này)
+
+1 cách diễn giải khác
+
+- `Enemy Frog` lúc này là 1 `holder` bọc `sprite` bên trong, ta có thể đưa `holder` đến bất kì vị trí nào trong `Scene`
+- `Frog Sprite` căn vị trí theo `holder`, do đó hiệu ứng làm tẹt, vị trí bắt đầu luôn là vị trí của `holder`, mà `holder` có thể
+tùy ý kéo vào bất kì vị trí nào trong `Scene` và hiệu ứng cũng đi theo.
+
+Tạo `Animation`
+
+- Mở cửa sổ `Animation`
+- Chọn đối tượng `holder` `Enemy Frog`
+- Lưu vào thư mục `Enemies`, đặt tên `Frog_Idle`
+
+Cách làm sai:
+
+- Kéo trực tiếp `Sprite` vào cửa sổ `Timeline`
+- Bởi vì đối tượng `holder` chỉ đóng vai trò như 1 `relative container` cho `sprite` bên trong
+- Nếu kéo `Sprite` animation vào thì `unity` tự động thêm `component` `Sprite Renderrer` vào đối tượng này
+- Như vậy hoàn toàn sai, lúc này có tới 2 hình con ếch
+
+Vậy thì làm sao kéo hiệu ứng vào `timeline` ??? `Holder` giữ nguyên, tạo hiệu ứng cho `sprite` con bên trong.
+
+- Bấm vào đối tượng `holder`
+- Bật `record`
+- Chọn đối tượng `sprite` (bởi vì `sprite` là con, ta đang chọn đối tượng cha nên cũng có thể hiểu là đang làm cùng 1 hiệu ứng)
+- Kéo thanh `timeline` đến vị trí `0:05`
+- Kéo con ếch thứ `2` trong `assets` vào vị trí `Sprite` trên `component` `Sprite Renderrer`
+- Làm tiếp tục
+- Lúc này khi đã có `frame` trên `timeline`, ta có thể trực tiếp kéo `frame` vào `timeline` mà không sợ `unity` tự
+động chèn `component` `Sprite Renderrer` vào `holder` như lúc đầu.
+
+![Frog](md_assets/frog2.png)
+
+Để kéo dài hiệu ứng, ta trực tiếp kéo `frame` vào `timeline` như thế này
+
+![Frog](md_assets/frog3.png)
+
+Đến đây tạm ổn, ta sẽ tiếp tục thêm hiệu ứng trong các video sau. Giờ đến hiệu ứng vật lý
+cho con cóc.
+
+Chọn `holder`, thêm `Rigidbody2D` để tùy ý chỉnh `velocity` khiến con cóc di chuyển. Đặt `kinematic` vì con cóc
+này không quan tâm tới trọng lực.
+
+Chọn `Frog Sprite`, thêm `Box Collider 2D`, rồi kéo khung vừa vặn để `collision` với `Player`.
+Thêm cái `collider` trên `Sprite` bởi vì ở đây có ảnh thực của con cóc.
+
+![Frog](md_assets/frog4.png)
