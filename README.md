@@ -2838,3 +2838,32 @@ public class Stompbox : MonoBehaviour
 Trong hình dưới đây, người chơi có `25%` tỉ lệ rớt ra vật phẩm `Cherry` khi tiêu diệt cóc
 
 ![Frog](md_assets/frog13.png)
+
+### 7.11. Making Enemy Hurt the Player
+
+Khi người chơi lớ ngớ bị con cóc chạm phải, họ sẽ mất `heart`
+
+- `DamagePlayer`: script chứa phương thức `OnTriggeEnter2D`, trừ `heart` của người chơi khi họ
+vào vùng `collision` (đã tạo ra ở phần bẫy chông `Spike`, ta có thể tái sử dụng `script` này cho con cóc)
+
+- Tạo vùng `collider` trên con cóc để xác định va chạm. Bởi vì đối tượng `Sprite` đã có sẵn `collider` để tương
+tác với `Ground` nên ta không nên thêm `collider` va chạm với `Player` vào đây.
+
+Thay vào đó, ta sẽ thêm `collider` vào đối tượng `holder`
+
+![Frog](md_assets/frog14.png)
+
+Bởi vì `collider` gắn vào đối tượng `holder`, do đó khi `Sprite` nhảy lên, `collider` va chạm này vẫn
+nằm dưới mặt đất. Do vậy, ta cần phải cho `collider` này nhảy cùng với `Sprite`.
+
+Vào cửa sổ `Animation`, bật tính năng `record`, kéo đến `Frame Jump`, kéo `Collider` lên.
+
+![Frog](md_assets/frog15.png)
+
+Chỉnh sửa vị trí `collider` ở `Frame 1` và `Frame 3`. Sau đó vào cửa sổ `Curves` để chỉnh đường cong `collider`.
+
+![Frog](md_assets/frog16.png)
+
+Hoàn thiện phần tạo con cóc
+
+![Frog](md_assets/frog17.png)
