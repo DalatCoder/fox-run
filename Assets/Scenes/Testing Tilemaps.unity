@@ -838,6 +838,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1208196161, guid: 192f5cd2ab84e0a498452b16763fc0b7, type: 3}
+      propertyPath: collectible
+      value: 
+      objectReference: {fileID: 5204661378695616137, guid: dcd10f5ee9d5064408569f189905736f,
+        type: 3}
+    - target: {fileID: 1208196161, guid: 192f5cd2ab84e0a498452b16763fc0b7, type: 3}
+      propertyPath: changeToDrop
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1125291532268261458, guid: 192f5cd2ab84e0a498452b16763fc0b7,
         type: 3}
       propertyPath: m_Name

@@ -2795,3 +2795,46 @@ public void Bounce()
 ```
 
 Tại `Stompbox` script, ngay hàm va chạm, ta gọi thêm phương thức `Bounce()` để người chơi nhảy lên 1 tí.
+
+### 7.10. Dropping Health Pickups
+
+Khi người chơi tiêu diệt con cóc, sẽ có tỉ lệ rớt ra vật phẩm hồi phục máu `Cherry`
+
+```csharp
+public class Stompbox : MonoBehaviour
+{
+    public GameObject deathEffect;
+
+    public GameObject collectible;
+
+    [Range(0, 100)]
+    public float changeToDrop;
+
+    // Start is called before the first frame update
+    void Start() { }
+
+    // Update is called once per frame
+    void Update() { }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Enemy")) return;
+
+        other.transform.parent.gameObject.SetActive(false);
+        Instantiate(deathEffect, other.transform.position, other.transform.rotation);
+
+        PlayerController.instance.Bounce();
+
+        float dropSelect = Random.Range(0, 100f);
+
+        if (dropSelect <= changeToDrop)
+        {
+            Instantiate(collectible, other.transform.position, other.transform.rotation);
+        }
+    }
+}
+```
+
+Trong hình dưới đây, người chơi có `25%` tỉ lệ rớt ra vật phẩm `Cherry` khi tiêu diệt cóc
+
+![Frog](md_assets/frog13.png)
