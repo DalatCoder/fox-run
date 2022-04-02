@@ -2517,3 +2517,65 @@ Chọn `Frog Sprite`, thêm `Box Collider 2D`, rồi kéo khung vừa vặn đ�
 Thêm cái `collider` trên `Sprite` bởi vì ở đây có ảnh thực của con cóc.
 
 ![Frog](md_assets/frog4.png)
+
+### 7.2. Setting up Movement
+
+Con ếch sẽ đi qua đi lại trong 1 khu vực theo trục `x`.
+
+- Đi qua trái, dừng 1 thời gian, chạm mốc trái
+- Xong đi qua phải, dừng 1 thời gian, chạm mốc phải
+- Rồi lại đi qua trái
+
+Tạo 1 `script` mới, đặt tên `EnemyController`, gắn vào đối tượng `holder`.
+
+Tạo 1 số biến cần thiết
+
+- `moveSpeed`: tốc độ di chuyển của con cóc
+- `leftPoint`: mốc trái
+- `rightPoint`: mốc phải
+- `moveRight`: hướng di chuyển hiện tại của con cóc (trái hay phải)
+- `theRB`: đối tượng `rigidbody` để thay đổi `velocity`
+
+```csharp
+public class EnemyController : MonoBehaviour
+{
+    public float moveSpeed;
+    public Transform leftPoint, rightPoint;
+
+    private bool moveRight;
+    private Rigidbody2D theRB;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        theRB = GetComponent<Rigidbody2D>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+}
+```
+
+Trên giao diện sẽ như thế này
+
+![Frog](md_assets/frog5.png)
+
+Việc tạo 2 đối tượng con trong `holder` là `Left Point` và `Right Point` chỉ mang ý nghĩa sắp xếp. Tức là
+2 đối tượng này liên quan đến `holder`, bỏ vào đây cho nó gọn. Khi chương trình thực thi ta phải dùng hàm
+để tách 2 đối tượng này ra khỏi `holder` (`Left Point` và `Right Point` không còn là con của `holder` nữa)
+
+Nếu để 2 đối tượng này là con của `holder` thì cứ mỗi khi `holder` di chuyển, 2 đối tượng này cũng di chuyển theo.
+Vì vậy `holder` sẽ di chuyển mãi mãi mà không bao giờ tới được điểm mốc trái hay mốc phải.
+
+```csharp
+void Start()
+{
+    theRB = GetComponent<Rigidbody2D>();
+
+    leftPoint.parent = null;
+    rightPoint.parent = null;
+}
+```
