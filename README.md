@@ -2734,3 +2734,45 @@ Ta có thể kéo dãn vòng cung để con ếch ở trên không lâu hơn
 Lúc này có con con ếch nhìn vui ghê
 
 ![Frog](md_assets/frog12.png)
+
+### 7.8. Defeating Enemies
+
+Người chơi nhảy vào đầu của con cóc để đánh bại nó, haha
+
+Ta tạo 1 điểm `collider` dưới chân người chơi để `detect` `collision` diễn ra giữa điểm này với bọn cóc.
+Nếu điểm này trùng vào bọn cóc thì tụi cóc tới công chiện luôn.
+
+Điểm `collider` này tương tự như `Ground Point` để xác định liệu người chơi có đứng trên mặt đất hay không ở
+các video trước.
+
+![Stompbox](md_assets/stompbox.png)
+
+Tạo `script` để xác định `collision`, đặt tên `Stompbox` và gắn nó vào `Stompbox object`.
+
+Tại phương thức `OnTriggerEnter2D`, ta kiểm tra `collision` diễn ra giữa `Player` và đối tượng `Collider` có `tag = Enemy`.
+Dĩ nhiên ta phải tạo `Tag` có tên `Enemy` và gắn vào `Frog Sprite` (bởi vì `Sprite` có `Collider`, còn `holder` bên ngoài không có)
+
+Khi va chạm diễn ra, ta kiểm tra `tag`, sau đó gọi phương thức `SetActive` trên đối tượng `parent` (`holder` bọc bên ngoài) để `deactive`
+cả đám. 1 đám như này thì khi `Destroy` sẽ có 1 số vấn đề gì đó, cho nên `SetActive` là an toàn nhât.
+
+```csharp
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (!other.CompareTag("Enemy")) return;
+
+    other.transform.parent.gameObject.SetActive(false);
+}
+```
+
+Bên cạnh đó, ta muốn có hiệu ứng diễn ra, thay vì đặt vào con cóc thì ta đặt nó vào điểm `Stompbox` này luôn cho nhanh.
+Để làm điều này, ta cần tham chiếu đến `game object deathEffect`, sau đó `Instantiate` `Effect` này tại điểm `collision` là xong.
+
+```csharp
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (!other.CompareTag("Enemy")) return;
+
+    other.transform.parent.gameObject.SetActive(false);
+    Instantiate(deathEffect, other.transform.position, other.transform.rotation);
+}
+```
