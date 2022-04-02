@@ -2713,3 +2713,24 @@ Quay lại `script`, tạo tham chiếu đến đối tượng `Animator`
 - Hàm `pause` đặt giá trị `isMoving = false`, chuyển sang `animation Frog_Idle`
 
 Lúc này ta đã có hiệu ứng con ếch nhảy qua nhảy lại khá sinh động
+
+### 7.6. Editing Animation Curves
+
+Mở `tab Curves` ở dưới cửa sổ `Animation`
+
+![Frog](md_assets/frog9.png)
+
+Đồ thị này biểu diễn thời gian diễn ra hiệu ứng. Ta có thể kéo các cung này để hiệu chỉnh
+các đoạn thời gian của hiệu ứng.
+
+Đây là đồ thị diễn ra hiệu ứng sau khi được kéo dãn theo chiều dọc (đưa con trỏ xuống dưới cùng của thanh cuộn dọc rồi kéo lên)
+
+![Frog](md_assets/frog10.png)
+
+Ta có thể kéo dãn vòng cung để con ếch ở trên không lâu hơn
+
+![Frog](md_assets/frog11.png)
+
+Lúc này có con con ếch nhìn vui ghê
+
+![Frog](md_assets/frog12.png)
