@@ -10,6 +10,8 @@ public class EnemyController : MonoBehaviour
     private bool moveRight;
     private Rigidbody2D theRB;
 
+    public SpriteRenderer theSR;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,19 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (moveRight)
+        {
+            theRB.velocity = new Vector2(moveSpeed, theRB.velocity.y);
+            theSR.flipX = true;
 
+            if (transform.position.x > rightPoint.position.x) moveRight = false;
+        }
+        else
+        {
+            theRB.velocity = new Vector2(-moveSpeed, theRB.velocity.y);
+            theSR.flipX = false;
+
+            if (transform.position.x < leftPoint.position.x) moveRight = true;
+        }
     }
 }

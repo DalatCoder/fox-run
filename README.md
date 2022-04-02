@@ -2,8 +2,10 @@
 
 Phiên bản Unity: 2019
 
-Đôi lúc, việc cải thiện game không nằm ở việc `code` mà nằm ở những cấu hình từng rất nhiều
+Đôi lúc, việc cải thiện game không nằm ở việc `code` mà nằm ở những cấu hình từ rất nhiều
 `component` khác nhau.
+
+Làm ngon phần vật lý trước, hiệu ứng để từ từ.
 
 ## 1. Adding Player
 
@@ -2577,5 +2579,49 @@ void Start()
 
     leftPoint.parent = null;
     rightPoint.parent = null;
+}
+```
+
+### 7.3. Moving the Frog
+
+Con ếch đi qua đi lại khá buồn cười
+
+```csharp
+void Update()
+{
+    if (moveRight)
+    {
+        theRB.velocity = new Vector2(moveSpeed, theRB.velocity.y);
+
+        if (transform.position.x > rightPoint.position.x) moveRight = false;
+    }
+    else
+    {
+        theRB.velocity = new Vector2(-moveSpeed, theRB.velocity.y);
+
+        if (transform.position.x < leftPoint.position.x) moveRight = true;
+    }
+}
+```
+
+Chỉnh hướng mặt của con cóc thông qua thuộc tính `FlipX` trên `Sprite Renderrer`
+
+```csharp
+void Update()
+{
+    if (moveRight)
+    {
+        theRB.velocity = new Vector2(moveSpeed, theRB.velocity.y);
+        theSR.flipX = true;
+
+        if (transform.position.x > rightPoint.position.x) moveRight = false;
+    }
+    else
+    {
+        theRB.velocity = new Vector2(-moveSpeed, theRB.velocity.y);
+        theSR.flipX = false;
+
+        if (transform.position.x < leftPoint.position.x) moveRight = true;
+    }
 }
 ```
