@@ -2970,3 +2970,60 @@ Chọn tất cả `game object SFX`, chọn phần `output` là `SFX`, làm tư�
 Lúc này, chạy game, ta có thể tùy chỉnh âm thanh của từng nhóm cùng 1 lúc, khá tiện. Không nên kéo quá `0`
 
 ![Audio](md_assets/audio8.png)
+
+## 9. Menus
+
+### 9.1. Creating a Title Screen
+
+Tạo màn hình bắt đầu game.
+
+Tạo 1 `Scene` mới, đặt tên `Main_Menu`. Kéo `Canvas` vào và vẽ 1 số `UI element` cần thiết.
+
+Chọn `Canvas`, đặt `scale` mode
+
+- Chọn `Scale with Screen Size`
+- `Width = 1920`, `Height = 1080`
+
+![Menu](md_assets/canvas1.png)
+
+Thêm `Image` vào `Canvas`
+
+- Chọn `Canvas`
+- Thêm `Image`
+- Vào folder `assets`, tìm ảnh `Fox tale` rồi kéo vào `Image Source`
+- Chọn `Set Native Size` để ảnh quay về kích thước gốc
+
+![Menu](md_assets/menu1.png)
+
+Thêm `Button` vào `Canvas`
+
+- Dùng `Rect tool` kéo để `button` trở nên to hơn
+- Chọn `Text`, tick vào `Best Fit` rồi kéo `Max Size` đến khi phù hợp
+- Kéo `UI Sprite` vào phần `Image Source` của `Button` để tạo nền cho `Button`
+
+Lúc này, ảnh nền nhìn khá tệ do các viền bo góc bị cắt lỗi. Để sửa,
+
+- Vào folder `assets`, chọn nền `UI Sprite` vừa rồi
+- `Sprite mode`, chọn `Single`
+- Vào `Sprite editor`
+- Ở 4 cạnh thấy 4 dấu xanh, kéo những dấu này lại gần tâm của ảnh, sao cho 4 đường kẻ cắt nhau tạo thành 1 hình
+vuông (bỏ hoàn toàn phần góc cạnh của hình ảnh)
+- Chọn `Apply` rồi đóng `Sprite Editor`
+- Vào `Button`, phần `Image Type` chọn `Sliced`
+
+Hiệu ứng `hover` lên `Button`
+
+- Chọn `type` từ `Color Tint` sang `Sprite Swap`
+- Kéo các `sprite` tương ứng vào vị trí các trạng thái mong muốn
+
+Đổi tên `Button` thành `Start Game Button`
+
+Đặt lại giá trị của `Text` thành `Start`, đối `font`, đặt `Best Fit Size`, đặt màu chữ trắng, kéo `shadow`
+
+`Duplicate` `Start Button` để tạo thành `Quit Button`
+
+![Menu](md_assets/menu2.png)
+
+Kéo `background` và 1 số cây cối vào để làm nền sinh động
+
+![Menu](md_assets/menu3.png)
