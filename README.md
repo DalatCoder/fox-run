@@ -3541,3 +3541,21 @@ Tạo `overlay`
 
 ![Overworld](md_assets/overworld3.png)
 
+### 11.2. Creating Map Points
+
+Tạo danh sách các `Map Point` ở các vị trí góc để điều hướng người chơi. Trong bản đồ vừa tạo có 14 góc và 7 điểm dừng chân. 
+Tổng cộng `20` `Map point` cần được tạo ra.
+
+Đặt tên tại các điểm quan trọng để dễ phân biệt
+
+![Map point](md_assets/overworld5.png)
+
+Tạo `script` mới để kiểm soát việc di chuyển giữa các `Map Point`, đặt tên `MapPoint`, và gắn vào `Map Point` đầu tiên, sau đó chọn `Overrider` 
+để gắn `script` này đến tất cả các `Mappoint` còn lại.
+
+Mở `script`, tạo tham chiếu đến vị trí 4 hướng của 1 `Point`.
+
+Đặt giá trị các điểm 1 cách thủ công cho đến khi hết
+
+![Map point](md_assets/overworld6.png)
+
