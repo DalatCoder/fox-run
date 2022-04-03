@@ -3373,3 +3373,33 @@ Lúc này, màn hình thiết kế và màn hình `game` trong `unity editor` tr
 - Bật `lock` để tránh `edit` nhầm cái `panel` này
 
 ![Fade](md_assets/fade2.png)
+
+## 10. Levels
+
+Các map trong trò chơi
+
+### 10.1. Setting up level ending
+
+Khi người chơi đến mốc cuối cùng của 1 `Level`, họ sẽ hoàn tất `Level` và chuyển sang màn tiếp theo 
+
+Tạo lá cờ đánh dấu vị trí cuối cùng 
+
+- Kéo trụ cờ vào 
+- Kéo lá cờ vào 
+
+![Flag](md_assets/flag.png)
+
+Kéo `collider` vào để xác định `collision` với `Player`
+
+![Flag](md_assets/flag2.png)
+
+Tạo `UI` thông báo cho người chơi biết họ đã hoàn tất `Level`
+
+- Chọn đối tượng `Canvas`
+- Thêm 1 `Text` vào, đặt tên `Level Complete`
+- Đặt giá trị `LEVEL COMPLETE!`, thay font, đổi màu chữ, thêm outline
+- Chỉnh `rotation`
+
+![Level complete](md_assets/flag3.png)
+
+
