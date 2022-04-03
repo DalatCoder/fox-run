@@ -2920,3 +2920,19 @@ public class AudioManager : MonoBehaviour
     }
 }
 ```
+
+### 8.2. Adjusting Sound Effects
+
+1 âm thanh nghe đi nghe lại liên tục sẽ rất nhàm chán, ví dụ như tiếng người chơi nhảy.
+Để sinh động hơn, ta có thể điều chỉnh tham số `pitch` trước mỗi lần phát âm thanh.
+Như vậy hiệu ứng sẽ giao động 1 tí, nghe không bị lặp lại, đỡ nhàm chán.
+
+```csharp
+public void PlaySFX(int soundToPlay)
+{
+    soundEffects[soundToPlay].Stop();
+
+    soundEffects[soundToPlay].pitch = Random.Range(0.9f, 1.1f);
+    soundEffects[soundToPlay].Play();
+}
+```

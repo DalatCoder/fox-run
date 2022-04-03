@@ -28,6 +28,8 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(int soundToPlay)
     {
         soundEffects[soundToPlay].Stop();
+
+        soundEffects[soundToPlay].pitch = Random.Range(0.9f, 1.1f);
         soundEffects[soundToPlay].Play();
     }
 }
