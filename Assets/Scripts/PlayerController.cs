@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
 
     public float bounceForce;
 
+    public bool stopInput;
+
     private void Awake()
     {
         instance = this;
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (PauseMenu.instance.isPaused) return;
+        if (stopInput) return;
 
         if (knockBackCounter <= 0)
         {

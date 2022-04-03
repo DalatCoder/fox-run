@@ -15,6 +15,8 @@ public class UIController : MonoBehaviour
     public float fadeSpeed;
     private bool shouldFadeToBlack, shouldFadeFromBlack;
 
+    public GameObject levelCompleteText;
+
     private void Awake()
     {
         instance = this;
@@ -117,5 +119,10 @@ public class UIController : MonoBehaviour
     {
         shouldFadeFromBlack = true;
         shouldFadeToBlack = false;
+    }
+
+    public void ShowCompleteText()
+    {
+        levelCompleteText.SetActive(true);
     }
 }

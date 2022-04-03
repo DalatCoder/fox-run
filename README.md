@@ -3402,4 +3402,62 @@ Tạo `UI` thông báo cho người chơi biết họ đã hoàn tất `Level`
 
 ![Level complete](md_assets/flag3.png)
 
+### 10.2. Making the level end
+
+Tại `LevelManager script`, thêm phương thức `EndLevel`, phương thức này được 
+gọi khi người chơi tới điểm cuối cùng của `Level`.
+
+Tạo script `LevelExit` và gắn nó vào đối tượng `LevelEnd`
+
+```csharp
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (!other.CompareTag("Player")) return;
+
+    LevelManager.instance.EndLevel();
+}
+```
+
+Tại `LevelManager`
+
+```csharp
+public void EndLevel()
+{
+    StartCoroutine(EndLevelCo());
+}
+
+public IEnumerator EndLevelCo()
+{
+    PlayerController.instance.stopInput = true;
+    CameraController.instance.stopFollow = true;
+    UIController.instance.ShowCompleteText();
+
+    yield return new WaitForSeconds(1.5f);
+
+    UIController.instance.FadeToBlack();
+
+    yield return new WaitForSeconds((1f / UIController.instance.fadeSpeed) + 0.25f);
+
+    SceneManager.LoadScene(levelToLoad);
+}
+```
+
+Ta dùng `coroutine` để trì hoãn thời gian. Một số thứ cần thực hiện, bao gồm:
+
+- Ngừng `Input` của người chơi, không cho họ di chuyển
+- Ngừng `Camera`, không cần theo dõi người chơi nữa
+- Hiển thị `game object` `Level Complete!` (mặc định bị `deactive` ngay từ đầu)
+- Đợi `1.5` giây
+- Chuyển màn hình sang màu đen
+- Load màn kế tiếp lên
+
+Bởi vì ta chỉ chặn `Input` của người chơi mà không `reset` `Velocity`. Do đó, người chơi 
+vẫn tiếp tục chạy về phía trước. 
+
+Để ngăn việc người chơi rớt xuống vực, ta vẽ thêm 1 số thứ vào `Level` để chặn người chơi lại.
+
+![Level End](md_assets/levelend1.png)
+
+Cuối cùng, khi chạy lên, ta có 1 phần chuyển cảnh khá đẹp.
+
 
