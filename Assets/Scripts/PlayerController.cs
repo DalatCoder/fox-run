@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
                 if (isGrounded)
                 {
                     theBD.velocity = new Vector2(theBD.velocity.x, jumpForce);
+                    AudioManager.instance.PlaySFX(10);
                 }
                 else
                 {
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour
                     {
                         theBD.velocity = new Vector2(theBD.velocity.x, jumpForce);
                         canDoubleJump = false;
+                        AudioManager.instance.PlaySFX(10);
                     }
                 }
             }
@@ -95,5 +97,6 @@ public class PlayerController : MonoBehaviour
     public void Bounce()
     {
         theBD.velocity = new Vector2(theBD.velocity.x, bounceForce);
+        AudioManager.instance.PlaySFX(10);
     }
 }

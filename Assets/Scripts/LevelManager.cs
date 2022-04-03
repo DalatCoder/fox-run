@@ -35,6 +35,7 @@ public class LevelManager : MonoBehaviour
     public IEnumerator RespawnCo()
     {
         PlayerController.instance.gameObject.SetActive(false);
+        AudioManager.instance.PlaySFX(8);
 
         yield return new WaitForSeconds(waitToRespawn);
 
