@@ -3105,3 +3105,31 @@ Sau khi `build` xong, ta sẽ có 1 số file như thế này
 ![Build](md_assets/build1.png)
 
 Chơi khá vui haha, bởi vì chưa có `Menu_Pause`, do đó ta nhấn `Alt + F4` để tạm thời thoát game
+
+### 9.4. Laying out pause menu
+
+Tạo `prefab` để tái sử dụng `Button`
+
+- Vào thư mục `Prefabs`
+- Tạo thư mục `UI`
+- Kéo `Button` vào
+
+Lý do tạo `prefab`
+
+- Để `Button` nhìn thuận mắt ở các màn hình khác nhau
+- Thay đổi chỉ 1 chỗ
+
+![Button](md_assets/button1.png)
+
+Chuyển sang `Scene` `Testing Tilemaps` để lên giao diện phần màn hình `Pause`
+
+- Chọn đối tượng `Canvas`
+- Thêm đối tượng con là 1 `Panel`, đổi tên thành `Pause Menu`
+
+  - `Panel` là lớp phủ lên `Canvas`, khi `pause` game, ta chỉ cần `active` `Panel` lên là được
+  - Bỏ `Sprite background image` có sẵn của `Panel`
+  - Tô màu đen lên
+  - Thêm `Text` là con của `Panel`, viết chữ `PAUSED`, đặt font chữ, màu trắng, best fit
+  - Kéo `Button Prefab` vào đây, tạo ra 3 button, `Resume`, `Level Select` và `Main Menu`
+
+![Pause](md_assets/pause1.png)
