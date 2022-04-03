@@ -3555,7 +3555,72 @@ Tạo `script` mới để kiểm soát việc di chuyển giữa các `Map Poin
 
 Mở `script`, tạo tham chiếu đến vị trí 4 hướng của 1 `Point`.
 
+```csharp
+public class MapPoint : MonoBehaviour
+{
+    public MapPoint up, right, down, left;
+    public bool isLevel;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+}
+```
+
 Đặt giá trị các điểm 1 cách thủ công cho đến khi hết
 
 ![Map point](md_assets/overworld6.png)
 
+### 11.3. Moving around level select screen
+
+Kéo `sprite` `Player` vào để người chơi có thể dùng hình ảnh này lựa chọn `Level`
+
+![Player](md_assets/player1.png)
+
+Tạo `script` để kiểm soát việc di chuyển của `Player` này, đặt tên `LSPlayer` (`LevelSelectPlayer`), và gắn vào `Player Sprite` phía trên.
+
+```csharp
+    void Update()
+    {
+        // Move the player
+        transform.position = Vector3.MoveTowards(transform.position, currentPoint.transform.position, moveSpeed * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, currentPoint.transform.position) < 0.1f)
+        {
+            // Player go to right
+            if (Input.GetAxisRaw("Horizontal") > 0.5f)
+            {
+                if (currentPoint.right) SetNextPoint(currentPoint.right);
+            }
+            // Player go to left
+            if (Input.GetAxisRaw("Horizontal") < -0.5f)
+            {
+                if (currentPoint.left) SetNextPoint(currentPoint.left);
+            }
+
+            // Player go up
+            if (Input.GetAxisRaw("Vertical") > 0.5f)
+            {
+                if (currentPoint.up) SetNextPoint(currentPoint.up);
+            }
+            // Player go down
+            if (Input.GetAxisRaw("Vertical") < -0.5f)
+            {
+                if (currentPoint.down) SetNextPoint(currentPoint.down);
+            }
+        }
+    }
+```
+
+Lúc này người chơi đã có thể di chuyển trên bản đồ, tuy nhiên chỉ khi đến địa điểm `MapPoint` thì mới có thể bấm phím 
+để tiếp tục đi đến điểm tiếp theo.
+
+![Map point](md_assets/overworld7.png)
