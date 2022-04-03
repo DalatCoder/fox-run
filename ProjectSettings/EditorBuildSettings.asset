@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main_Menu.unity
     guid: 915b44eab3b72d84aafa8247bec630cd
   - enabled: 1
-    path: Assets/Scenes/Testing Tilemaps.unity
-    guid: 434d641f219efe147b63d80d7a63fe91
+    path: Assets/Scenes/Levels/Level01.unity
+    guid: 88e061aaa012ea84b86c3266831b419c
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level02.unity
+    guid: 091cf817499c5dc4faebbeb56a6715c7
   m_configObjects: {}

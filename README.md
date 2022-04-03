@@ -3498,3 +3498,46 @@ Ta không kéo phần `Grid` và `Tilemap` vào `Level Pack` bởi vì trong `un
 Cuối cùng, ta kéo `Level Pack` vào thư mục `Prefabs`
 
 ![Level Pack](md_assets/levelpack1.png)
+
+### 10.4. Make two Levels
+
+Tạo 2 `map` mới, sử dụng `Level Pack`
+
+1 số ý tưởng khi tạo 1 `Level` mới
+
+- `Level` đầu tiên tạo ra 1 số thử thách nhỏ để người chơi tiếp cận với game và các kĩ thuật
+- Từ từ tăng độ khó để thử thách người chơi
+
+Tạo thư mục `Levels` trong thư mục `Scenes` để thêm vào các `Level`
+
+## 11. Level Select 
+
+### 11.1. Setting up the level select map
+
+Tạo 1 bản đồ có vị trí các `Level` để người dùng có thể lựa chọn
+
+Các bước thực hiện
+
+- Tạo `Scene` mới 
+- Tạo `Tilemap`
+
+- Tạo `Tileset` mới để vẽ
+  - Mở cửa sổ `Tile palette`
+  - `Create new palette`
+  - Đặt tên `OverWorld`
+  - Lưu vào `asstes/Tiles/OverWorld`
+  - Vào thư mục `graphics/OverWorld` rồi kéo `tile` vào
+
+![OverWorld](md_assets/overworld1.png)
+
+Vẽ địa hình cơ bản 
+
+![Overworld](md_assets/overworld2.png)
+
+Để vẽ đường xá lên, thay vì ghi đè tile trực tiếp. Ta tạo 1 `Tilemap` khác đè lên `Tilemap` này.
+Trên `Tilemap` mới sẽ vẽ đường xá.
+
+Tạo `overlay`
+
+![Overworld](md_assets/overworld3.png)
+
