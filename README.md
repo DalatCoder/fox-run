@@ -3247,3 +3247,26 @@ public void PauseUnpause()
     }
 }
 ```
+### 9.6. Fixing Pausing Issues
+
+Khi đang ở giao diện `pause`, mọi hoạt động của người chơi đều ngừng lại. Tuy nhiên, khi họ 
+bấm nút `space` để nhảy lên, hệ thống sẽ ghi lại. Khi tắt `pause` screen thì người chơi nhảy lên. 
+
+1 vấn đề tiếp theo, khi `pause` screen, ta đặt `timeScale = 0` để ngừng mọi hoạt động của người chơi. 
+Nếu người chơi chọn vào `Main Menu` để về giao diện chính, sau đó chọn `Start` để bắt đầu 1 game mới. 
+Lúc này thời gian vẫn bị ngưng động, người chơi không thể thao tác gì.
+
+Để `fix` vấn đề thứ 2 khá dễ, ở hàm chuyển `Scene` tương ứng, ta chỉ cần đặt lại `timeScale = 1` là xong.
+
+Với vấn đề thứ nhất, ta cần chặn mọi `Input` của người chơi khi họ đang trong giao diện `pause`. 
+Để làm được điều này, ta cần phải truy cập vào biến `isPaused` ở `PlayerController script`. Do đó, 
+ta sẽ áp dụng mẫu `singleton` vào `PauseMenu script`.
+
+Tại `PlayerController`, chỉ cần làm như này là được
+
+```csharp
+void Update()
+{
+  if (PauseMenu.instance.isPaused) return;
+}
+```

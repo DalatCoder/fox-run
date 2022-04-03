@@ -5,10 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    public static PauseMenu instance;
+
     public string levelSelectScene, mainMenuScene;
 
     public GameObject pauseScreen;
     public bool isPaused;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -46,10 +53,12 @@ public class PauseMenu : MonoBehaviour
     public void LevelSelect()
     {
         SceneManager.LoadScene(levelSelectScene);
+        Time.timeScale = 1f;
     }
 
     public void MainMenu()
     {
         SceneManager.LoadScene(mainMenuScene);
+        Time.timeScale = 1f;
     }
 }
