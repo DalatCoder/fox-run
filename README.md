@@ -3027,3 +3027,61 @@ Hiệu ứng `hover` lên `Button`
 Kéo `background` và 1 số cây cối vào để làm nền sinh động
 
 ![Menu](md_assets/menu3.png)
+
+### 9.2. Making the Menu works
+
+Tạo 1 script mới, đặt tên `MainMenu` và gắn nó vào đối tượng `Canvas`.
+
+Trong `script` này, ta muốn làm 2 việc chính lúc này.
+
+- Khi người chơi bấm vào `Start`, chuyển cảnh sang `Scene Level` để bắt đầu trò chơi
+- Khi người chơi bấm vào `Quit`, thoát game
+
+Tạo code để thoát game
+
+```csharp
+public void QuitGame()
+{
+    Application.Quit();
+    Debug.Log("Quiting Game");
+}
+```
+
+Chọn `game object Quit Game Button`, tại phần `On Click`
+
+- Kéo thả đối tượng `Canvas` vào đây
+- Tại phần chọn `MainMenu`, chọn phương thức `QuitGame`
+
+![Menu](md_assets/menu4.png)
+
+Làm tương tự để gắn hàm xử lý cho `Start Game Button`
+
+Trong `script`, ta tiến hành thêm 1 số thứ để có thể `load` màn hình chơi game
+
+- `string startScene`: tên `Scene` để `load` (có nhiều `Scene`, mỗi `Scene` ứng với 1 game `Level`)
+- Các bài trước ta đều làm việc trên `Scene` có tên `Testing Tilemaps`, do đó ta sẽ dùng `Scene` này làm `startScene`
+- `using UnityEngine.SceneManagement`
+- Thêm code để load `scene`: `SceneManager.LoadScene(sceneName)`
+
+```csharp
+public void StartGame()
+{
+    SceneManager.LoadScene(startScene);
+}
+```
+
+Tuy nhiên, để `load` 1 `scene` lên. `Scene` đó cần phải được thêm vào `Build Settings`
+
+- Chọn `Menu` `File`
+- Phần `Build Settings`
+- Phần `Scenes In Build`
+- Kéo `Scene` `Testing Tilemaps` vào đây
+- Kéo `Scene` `Main Menu` vào đây
+- Xóa `Sample Scene` khỏi danh sách này
+
+Thứ tự của các `Scene` trong danh sách này cũng quan trọng
+
+- `Scene` đầu tiên trong danh sách sẽ là `Scene` đầu tiên được hiển thị
+- Do đó, ta kéo `Main_Menu` lên trên `Testing Tilemaps`
+
+![Menu](md_assets/menu5.png)
