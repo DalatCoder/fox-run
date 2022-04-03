@@ -2936,3 +2936,37 @@ public void PlaySFX(int soundToPlay)
     soundEffects[soundToPlay].Play();
 }
 ```
+
+### 8.3. Adding music & Audio mixing
+
+Thêm nhạc nền chính thức vào game, tick vào `play on awake` và `loop`
+
+![audio](md_assets/audio3.png)
+
+Tạo 2 biến mới để tham chiếu đến hiệu ứng cần thiết
+
+```csharp
+public AudioSource backgroundMusic, levelEndMucsic;
+```
+
+![Audio](md_assets/audio4.png)
+
+Khi trong game có quá nhiều hiệu ứng âm thanh, các đoạn `audio` phát ra sẽ có cái to cái
+nhỏ. Ta có thể điều chỉnh thủ công phần `volume` của từng cái. Bên cạnh đó, ta có thể
+sử dụng hệ thống `audio mixer` có sẵn của `unity`.
+
+Vào `windows`, `audio`, `audio mixer`
+
+![Audio](md_assets/audio5.png)
+
+Tạo 2 `group` tương ứng trong phần `Master`, tương ứng với `SFX` và `Music`
+
+![Audio](md_assets/audio6.png)
+
+Chọn tất cả `game object SFX`, chọn phần `output` là `SFX`, làm tương tự với phần `Music`
+
+![Audio](md_assets/audio7.png)
+
+Lúc này, chạy game, ta có thể tùy chỉnh âm thanh của từng nhóm cùng 1 lúc, khá tiện. Không nên kéo quá `0`
+
+![Audio](md_assets/audio8.png)
