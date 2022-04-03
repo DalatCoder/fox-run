@@ -3460,4 +3460,41 @@ vẫn tiếp tục chạy về phía trước.
 
 Cuối cùng, khi chạy lên, ta có 1 phần chuyển cảnh khá đẹp.
 
+### 10.3. Creating a reusable level pack
 
+Có rất nhiều thứ phải tái sử dụng lại ở mỗi `Level`. Ta có thể làm thủ công từng `Prefab`, tuy nhiên khi chuyển sang 
+`Scene` mới. Các `reference` có sẵn trong `Prefab` đều bị mất hết. Dẫn đến phiền toái khi phải tham chiếu lại từ đầu.
+
+Để giải quyết vấn đề này, ta sẽ tạo duy nhất 1 `Prefab`, đóng vai trò là `holder` chung cho tất cả các đối tượng 
+cần tái sử dụng này.
+
+Trong `unity`, ta có thể lồng các `Prefab` vào nhau.
+
+- Tạo `empty game object`, đặt tên `Level Pack`
+- Kéo tất cả các đối tượng cần tái sử dụng ở mỗi `Level` vào đối tượng này
+
+  - `MainCamera`
+  - `Background`
+  - `Player`
+  - `UI Canvas`
+  - `CheckpointController` (kéo 1 `Checkpoint` vào làm con của `CheckpointController`)
+  - `LevelManager`
+  - `KillPlane`
+  - `AudioManager`
+  - `LevelEnd`
+
+- Tạo folder `Enemies` trong phần `Prefabs`, kéo con cóc vào đây (`Enemy Frog`)
+
+- Tạo folder `Main Mechanics` trong phần `Prefabs`, kéo những thứ dưới đây vào cho gọn
+
+  - `AudioManager`
+  - `Background`
+  - `Checkpoint`
+  - `Player`
+  - `Main Camera`
+
+Ta không kéo phần `Grid` và `Tilemap` vào `Level Pack` bởi vì trong `unity`, tốc độ render `Grid prefab` rất chậm.
+
+Cuối cùng, ta kéo `Level Pack` vào thư mục `Prefabs`
+
+![Level Pack](md_assets/levelpack1.png)
