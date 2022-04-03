@@ -247,6 +247,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 508658606}
     m_Modifications:
+    - target: {fileID: 5608834151543864373, guid: 368f6f14dcf3ad747ab25c66635be5fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1317295156}
+    - target: {fileID: 5608834151543864373, guid: 368f6f14dcf3ad747ab25c66635be5fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LevelSelect
+      objectReference: {fileID: 0}
     - target: {fileID: 5608834151543864374, guid: 368f6f14dcf3ad747ab25c66635be5fd,
         type: 3}
       propertyPath: m_Pivot.x
@@ -973,7 +983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &508658606
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1852,6 +1862,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 508658606}
     m_Modifications:
+    - target: {fileID: 5608834151543864373, guid: 368f6f14dcf3ad747ab25c66635be5fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1317295156}
+    - target: {fileID: 5608834151543864373, guid: 368f6f14dcf3ad747ab25c66635be5fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PauseUnpause
+      objectReference: {fileID: 0}
     - target: {fileID: 5608834151543864374, guid: 368f6f14dcf3ad747ab25c66635be5fd,
         type: 3}
       propertyPath: m_Pivot.x
@@ -6875,6 +6895,7 @@ GameObject:
   - component: {fileID: 1317295152}
   - component: {fileID: 1317295151}
   - component: {fileID: 1317295155}
+  - component: {fileID: 1317295156}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -6990,6 +7011,22 @@ MonoBehaviour:
   heartHalf: {fileID: 2139837793675082937, guid: d9a616f95048ea84e8fc6f7920f846b8,
     type: 3}
   gemText: {fileID: 915527975}
+--- !u!114 &1317295156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317295150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b067d4d963dcee74880e360b6ee624ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelSelectScene: Main_Menu
+  mainMenuScene: Main_Menu
+  pauseScreen: {fileID: 508658605}
+  isPaused: 0
 --- !u!1 &1318342370
 GameObject:
   m_ObjectHideFlags: 0
@@ -7388,6 +7425,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 508658606}
     m_Modifications:
+    - target: {fileID: 5608834151543864373, guid: 368f6f14dcf3ad747ab25c66635be5fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1317295156}
+    - target: {fileID: 5608834151543864373, guid: 368f6f14dcf3ad747ab25c66635be5fd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MainMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 5608834151543864374, guid: 368f6f14dcf3ad747ab25c66635be5fd,
         type: 3}
       propertyPath: m_Pivot.x

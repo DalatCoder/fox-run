@@ -3133,3 +3133,117 @@ Chuyển sang `Scene` `Testing Tilemaps` để lên giao diện phần màn hìn
   - Kéo `Button Prefab` vào đây, tạo ra 3 button, `Resume`, `Level Select` và `Main Menu`
 
 ![Pause](md_assets/pause1.png)
+
+### 9.5. Pausing the Game
+
+Tạo 1 script mới để xử lý các sự kiện diễn ra trên `Paused Panel`, đặt tên `PauseMenu` và gắn 
+vào đối tượng `Canvas`.
+
+Khai báo 1 số biến cần dùng
+
+- `string levelSelectScene`: tên `Scene` chứa phần `Select Level`
+- `string mainMenuScene`: tên `Scene` chứa phần `Main Menu`
+
+Khai báo 2 phương thức tương ứng
+
+- `LevelSelect`
+- `MainMenu`
+
+Dùng phương thức `SceneManager.LoadScene` để `load` `Scene` tương ứng trong 2 phương thức trên.
+
+```csharp
+public class PauseMenu : MonoBehaviour
+{
+    public string levelSelectScene, mainMenuScene;
+
+    void Start() { }
+    void Update() { }
+
+    public void LevelSelect()
+    {
+        SceneManager.LoadScene(levelSelectScene);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(mainMenuScene);
+    }
+}
+```
+
+Quay lại giao diện `unity editor`, đặt giá trị tương ứng cho `Level Select` và `Main Menu`. 
+Sau đó chọn vào `Button` và gán sự kiện `On Click` tương ứng với các phương thức đã được định
+nghĩa trên `PauseMenu script`.
+
+![Menu](md_assets/menu6.png)
+
+Lúc này 2 button `LevelSelect` và `MainMenu` đã hoạt động tốt. 
+
+Bây giờ, ta sẽ làm 1 số thứ cần thiết để mở được `Panel Pause` này lên và `resume game`. 
+
+- `active panel`: mở giao diện `pause` lên, ngừng trò chơi
+- `deactive panel`: tắt giao diện `pause`, tiếp tục trò chơi 
+
+Bởi vì cần phải `active` và `deactive` trên bản thân `panel`, do đó ta gắn `script` ở đối tượng cha 
+của nó, tức là `Canvas`.
+
+Tạo 1 số tham chiếu cần thiết
+
+- `GameObject pauseScreen`: `panel` chứa màn hình `pause`
+- `bool isPaused`: trạng thái
+
+Tạo phương thức để `pause` và `unPause` trò chơi
+
+```csharp
+public void PauseUnpause()
+{
+    if (isPaused)
+    {
+        isPaused = false;
+        pauseScreen.SetActive(false);
+    }
+    else
+    {
+        isPaused = true;
+        pauseScreen.SetActive(true);
+    }
+}
+```
+
+Gắn phương thức này vào nút `Resume`
+
+Khi chơi game, người dùng có thể nhấn phím `Esc` để vào màn hình `Paused`
+
+```csharp
+void Update()
+{
+    if (Input.GetKeyDown(KeyCode.Escape))
+    {
+        PauseUnpause();
+    }
+}
+```
+
+Chọn `panel`, tick vào nút `active` để mặc định `deactive pause screen`, khi nào người dùng nhấn `Esc` thì mới mở giao diện này lên.
+
+Để dừng mọi hoạt động của người chơi khi giao diện `pause` đang `active`, ta có thể đặt giá trị `timeScale = 0`
+
+```csharp
+public void PauseUnpause()
+{
+    if (isPaused)
+    {
+        isPaused = false;
+        pauseScreen.SetActive(false);
+
+        Time.timeScale = 1f;
+    }
+    else
+    {
+        isPaused = true;
+        pauseScreen.SetActive(true);
+
+        Time.timeScale = 0f;
+    }
+}
+```
