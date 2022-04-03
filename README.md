@@ -3136,7 +3136,7 @@ Chuyển sang `Scene` `Testing Tilemaps` để lên giao diện phần màn hìn
 
 ### 9.5. Pausing the Game
 
-Tạo 1 script mới để xử lý các sự kiện diễn ra trên `Paused Panel`, đặt tên `PauseMenu` và gắn 
+Tạo 1 script mới để xử lý các sự kiện diễn ra trên `Paused Panel`, đặt tên `PauseMenu` và gắn
 vào đối tượng `Canvas`.
 
 Khai báo 1 số biến cần dùng
@@ -3171,20 +3171,20 @@ public class PauseMenu : MonoBehaviour
 }
 ```
 
-Quay lại giao diện `unity editor`, đặt giá trị tương ứng cho `Level Select` và `Main Menu`. 
+Quay lại giao diện `unity editor`, đặt giá trị tương ứng cho `Level Select` và `Main Menu`.
 Sau đó chọn vào `Button` và gán sự kiện `On Click` tương ứng với các phương thức đã được định
 nghĩa trên `PauseMenu script`.
 
 ![Menu](md_assets/menu6.png)
 
-Lúc này 2 button `LevelSelect` và `MainMenu` đã hoạt động tốt. 
+Lúc này 2 button `LevelSelect` và `MainMenu` đã hoạt động tốt.
 
-Bây giờ, ta sẽ làm 1 số thứ cần thiết để mở được `Panel Pause` này lên và `resume game`. 
+Bây giờ, ta sẽ làm 1 số thứ cần thiết để mở được `Panel Pause` này lên và `resume game`.
 
 - `active panel`: mở giao diện `pause` lên, ngừng trò chơi
-- `deactive panel`: tắt giao diện `pause`, tiếp tục trò chơi 
+- `deactive panel`: tắt giao diện `pause`, tiếp tục trò chơi
 
-Bởi vì cần phải `active` và `deactive` trên bản thân `panel`, do đó ta gắn `script` ở đối tượng cha 
+Bởi vì cần phải `active` và `deactive` trên bản thân `panel`, do đó ta gắn `script` ở đối tượng cha
 của nó, tức là `Canvas`.
 
 Tạo 1 số tham chiếu cần thiết
@@ -3247,19 +3247,20 @@ public void PauseUnpause()
     }
 }
 ```
+
 ### 9.6. Fixing Pausing Issues
 
-Khi đang ở giao diện `pause`, mọi hoạt động của người chơi đều ngừng lại. Tuy nhiên, khi họ 
-bấm nút `space` để nhảy lên, hệ thống sẽ ghi lại. Khi tắt `pause` screen thì người chơi nhảy lên. 
+Khi đang ở giao diện `pause`, mọi hoạt động của người chơi đều ngừng lại. Tuy nhiên, khi họ
+bấm nút `space` để nhảy lên, hệ thống sẽ ghi lại. Khi tắt `pause` screen thì người chơi nhảy lên.
 
-1 vấn đề tiếp theo, khi `pause` screen, ta đặt `timeScale = 0` để ngừng mọi hoạt động của người chơi. 
-Nếu người chơi chọn vào `Main Menu` để về giao diện chính, sau đó chọn `Start` để bắt đầu 1 game mới. 
+1 vấn đề tiếp theo, khi `pause` screen, ta đặt `timeScale = 0` để ngừng mọi hoạt động của người chơi.
+Nếu người chơi chọn vào `Main Menu` để về giao diện chính, sau đó chọn `Start` để bắt đầu 1 game mới.
 Lúc này thời gian vẫn bị ngưng động, người chơi không thể thao tác gì.
 
 Để `fix` vấn đề thứ 2 khá dễ, ở hàm chuyển `Scene` tương ứng, ta chỉ cần đặt lại `timeScale = 1` là xong.
 
-Với vấn đề thứ nhất, ta cần chặn mọi `Input` của người chơi khi họ đang trong giao diện `pause`. 
-Để làm được điều này, ta cần phải truy cập vào biến `isPaused` ở `PlayerController script`. Do đó, 
+Với vấn đề thứ nhất, ta cần chặn mọi `Input` của người chơi khi họ đang trong giao diện `pause`.
+Để làm được điều này, ta cần phải truy cập vào biến `isPaused` ở `PlayerController script`. Do đó,
 ta sẽ áp dụng mẫu `singleton` vào `PauseMenu script`.
 
 Tại `PlayerController`, chỉ cần làm như này là được
@@ -3270,3 +3271,105 @@ void Update()
   if (PauseMenu.instance.isPaused) return;
 }
 ```
+
+### 9.7. Adding a Fading Black Screen
+
+Thêm 1 số hiệu ứng chuyển cảnh cho sinh động. Ví dụ như khi người chơi chết, tự dưng họ bị hồi sinh, cảnh giật giật khá là không ổn.
+Sẽ tốt hơn nếu như lúc đó màn hình tối lại 1 chút, sau đó màn hình sáng lên khi người chơi được hồi sinh trở lại.
+
+- Chọn đối tượng `Canvas`
+- Thêm 1 `Panel`, đặt tên `Fade Screen
+- Bỏ `background` có sẵn của `Panel` này
+- Đặt nền thành màu đen
+
+  - Khi người chơi chết, đặt `alpha = 1`
+  - Khi hồi sinh xong, đặt `alpha = 0`
+
+Vào `UIController script`, làm 1 số thứ
+
+- thêm tham chiếu đến đối tượng `Fade Screen` này, `Image fadeScreen`
+- `float fadeSpeed` tốc độ
+- `bool shouldFadeToBack, shouldFadeFromBlack` chuyển trắng thành đen hay chuyển từ đen thành trắng
+
+![Fade](md_assets/fade1.png)
+
+Trong phương thức `update` của `UIController`
+
+- Ta thay đổi giá trị của `fadeScreen.color`
+- Thay vì gán trực tiếp giá trị `alpha` bằng `0` hoặc `1`
+- Ta dùng phương thức: `Mathf.MoveTowards(fadeScreen.color.a, 1f, fadeSpeed * Time.deltaTime)` để màn hình chuyển dần `fadeScreen.color.a` đến khi
+đen hoàn toàn `1f` hoặc ngược lại khi muốn chuyển từ đen về trắng
+
+```csharp
+void Update()
+{
+    if (shouldFadeToBlack)
+    {
+        fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, Mathf.MoveTowards(fadeScreen.color.a, 1f, fadeSpeed * Time.deltaTime));
+
+        if (fadeScreen.color.a == 1f)
+            shouldFadeToBlack = false;
+    }
+
+    if (shouldFadeFromBlack)
+    {
+        fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, Mathf.MoveTowards(fadeScreen.color.a, 0f, fadeSpeed * Time.deltaTime));
+
+        if (fadeScreen.color.a == 0f)
+            shouldFadeFromBlack = false;
+    }
+}
+```
+
+Tạo 2 phương thức để gọi ở những sự kiện
+
+```csharp
+public void FadeToBlack()
+{
+    shouldFadeToBlack = true;
+    shouldFadeFromBlack = false;
+}
+
+public void FadeFromBlack()
+{
+    shouldFadeFromBlack = true;
+    shouldFadeToBlack = false;
+}
+```
+
+Quay lại `LevelManager script`, phương thức `Respawn`
+
+```csharp
+public IEnumerator RespawnCo()
+{
+    PlayerController.instance.gameObject.SetActive(false);
+    AudioManager.instance.PlaySFX(8);
+
+    yield return new WaitForSeconds(waitToRespawn - (1f / UIController.instance.fadeSpeed));
+
+    UIController.instance.FadeToBlack();
+
+    yield return new WaitForSeconds((1f / UIController.instance.fadeSpeed) + 0.5f);
+
+    UIController.instance.FadeFromBlack();
+
+    PlayerController.instance.gameObject.SetActive(true);
+
+    PlayerController.instance.transform.position = CheckpointController.instance.spawnPoint;
+    PlayerHealthController.instance.currentHealth = PlayerHealthController.instance.maxHealth;
+    UIController.instance.UpdateHealthDisplay();
+}
+```
+
+Tiếp theo, khi mới vào game, giá trị `alpha = 1f`, sau đó từ từ chuyển về `0f` và người chơi bắt đầu cuộc vui.
+
+- Chọn `Fade Screen panel`, đặt `alpha = 1f`
+- Tại hàm `Start` của `UIController`, gọi phương thức `FadeFromBlack`
+
+Lúc này, màn hình thiết kế và màn hình `game` trong `unity editor` trở nên đen thui do cái `panel` che mất.
+
+- Chọn phần `Layer`
+- Tại `UI`, tắt con mắt
+- Bật `lock` để tránh `edit` nhầm cái `panel` này
+
+![Fade](md_assets/fade2.png)
