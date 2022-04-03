@@ -3085,3 +3085,23 @@ Thứ tự của các `Scene` trong danh sách này cũng quan trọng
 - Do đó, ta kéo `Main_Menu` lên trên `Testing Tilemaps`
 
 ![Menu](md_assets/menu5.png)
+
+### 9.3. Doing a Test Build
+
+Đến giờ build game rồi.
+
+- Vào `Menu` `File`
+- Chọn `Build Settings`
+- Chọn `PC`
+- Chọn `Player Settings`
+- Đổi tên `Company Name` thành `NTH`
+- Đổi tên `Product Name` thành `Fox's Tale`
+- Còn 1 vài cái để đó cũng được, khi nào `Final Build` rồi thêm sau
+- Nhấn `Build`
+- Chọn `Folder` để chứa code sau khi build game
+
+Sau khi `build` xong, ta sẽ có 1 số file như thế này
+
+![Build](md_assets/build1.png)
+
+Chơi khá vui haha, bởi vì chưa có `Menu_Pause`, do đó ta nhấn `Alt + F4` để tạm thời thoát game
