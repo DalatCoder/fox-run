@@ -3624,3 +3624,35 @@ Lúc này người chơi đã có thể di chuyển trên bản đồ, tuy nhiê
 để tiếp tục đi đến điểm tiếp theo.
 
 ![Map point](md_assets/overworld7.png)
+
+### 11.4. Following the player's movement
+
+Tạo `script` để `camera` di chuyển theo vị trí của `player`, đặt tên `LSCameraController` và gắn vào đối tượng `Camera`.
+
+Khai báo 1 số biến 
+
+- `Vector2 minPosition`: vị trí `bottom left`
+- `Vector2 maxPosition`: vị trí `top right`
+- `Transform target`: đối tượng mà `camera` sẽ đi theo (`player`)
+
+![Camera](md_assets/lscamera.png)
+
+Lúc này, camera đã theo dấu người dùng khá tốt. Tuy nhiên, lâu lâu vẫn giật giật 1 tí. Lý do bởi 
+
+- `player` di chuyển trong vòng lặp `update`
+- `camera` di chuyển trong vòng lặp `update`
+
+Cả 2 cùng di chuyển trong phương thức `update`, do đó lâu lâu `player` di chuyển trước `camera`, lâu lâu `camera` lại di chuyển trước `player`.
+
+Để `fix`, ta đổi hàm `update` trong phần `LSCamera script` thành `lateupdate`. Như vậy, `camera` sẽ di chuyển sau khi `player` đã di chuyển.
+
+
+```csharp
+    void LateUpdate()
+    {
+        float xPosition = Mathf.Clamp(target.position.x, minPosition.x, maxPosition.x);
+        float yPosition = Mathf.Clamp(target.position.y, minPosition.y, maxPosition.y);
+
+        transform.position = new Vector3(xPosition, yPosition, transform.position.z);
+    }
+```
