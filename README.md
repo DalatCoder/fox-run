@@ -2867,3 +2867,56 @@ Chỉnh sửa vị trí `collider` ở `Frame 1` và `Frame 3`. Sau đó vào c�
 Hoàn thiện phần tạo con cóc
 
 ![Frog](md_assets/frog17.png)
+
+## 8. Audio
+
+### 8.1. Playing Sound Effects
+
+Tạo 1 danh sách `sound effects`, khi có sự kiện nào diễn ra thì chọn hiệu ứng tương ứng
+trong danh sách đó rồi gọi hàm `play()` để phát.
+
+Vào thư mục `assets/2D Platformer Assets/Audio/Sound Effects`, kéo tất cả `audio`
+ở đây vào `Hierarchy`.
+
+Để dễ quản lý mớ `audio` này, ta tạo 1 `empty game object`, đặt tên `Audio Manager` rồi kéo
+mớ `audio` này làm con của `Audio Manager`.
+
+`Audio Manager` cũng quản lý tương tự như `Level Manager`
+
+![Audio](md_assets/audio1.png)
+
+Mặc định, các `audio` được phát ngay khi vào game, ta bỏ tick tại phần `Play on Awake` để tắt tính năng này.
+
+Tạo `script`, đặt tên `AudioManager` rồi gắn `script` này vào đối tượng `Audio Manager` phía trên.
+
+- Lớp `ManagerAudio` được dùng lại nhiều lần ở các `script` khác nhau, do đó ta áp dụng mẫu `singleton`
+- Danh sách `audio` thuộc kiểu `AudioSource`, ta không dùng hàm `GetComponent` để lấy tất cả `AudioSource` thuộc
+về đối tượng `Audio Manager`. Bởi vì sau này `Audio Manager` còn chứa cả nhạc nền nữa. Thay vào đó,
+ta tạo 1 mảng rồi kéo thủ công các hiệu ứng vào đây, biết thứ tự của các hiệu ứng để `play` đúng.
+
+![audio](md_assets/audio2.png)
+
+Khi người chơi thu các viên `gem` ở gần nhau, mỗi `gem` đều có hiệu ứng âm thanh. Do đó,
+để phát âm thanh của `gem` hiện tại, ta cần `stop` âm thanh của `gem` trước. Nếu không
+có hàm `stop`, chỉ 1 bài được mở lên. Khi bài này kết thúc thì mới có thể mở bài khác.
+`Stop` gọi thoải mái không có vấn đề gì cả.
+
+```csharp
+public class AudioManager : MonoBehaviour
+{
+    public static AudioManager instance;
+
+    public AudioSource[] soundEffects;
+
+    private void Awake() { instance = this; }
+
+    void Start() { }
+    void Update() { }
+
+    public void PlaySFX(int soundToPlay)
+    {
+        soundEffects[soundToPlay].Stop();
+        soundEffects[soundToPlay].Play();
+    }
+}
+```
