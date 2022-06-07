@@ -8574,6 +8574,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Eagle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8128384441712315608, guid: 6fa600ab89372114ca2775ce85b5dcdc,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8128384441712315609, guid: 6fa600ab89372114ca2775ce85b5dcdc,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8128384441712315609, guid: 6fa600ab89372114ca2775ce85b5dcdc,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -613904149
+      objectReference: {fileID: 0}
     - target: {fileID: 8128384441712315614, guid: 6fa600ab89372114ca2775ce85b5dcdc,
         type: 3}
       propertyPath: m_RootOrder
@@ -8805,6 +8820,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rat
       objectReference: {fileID: 0}
+    - target: {fileID: 8823672328600201762, guid: 43d39bc3bbfe19049b6c6e1e8806efbb,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823672328600201764, guid: 43d39bc3bbfe19049b6c6e1e8806efbb,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823672328600201764, guid: 43d39bc3bbfe19049b6c6e1e8806efbb,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -613904149
+      objectReference: {fileID: 0}
     - target: {fileID: 8823672328600201767, guid: 43d39bc3bbfe19049b6c6e1e8806efbb,
         type: 3}
       propertyPath: m_RootOrder
@@ -9026,6 +9056,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Rat (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823672328600201762, guid: 43d39bc3bbfe19049b6c6e1e8806efbb,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823672328600201764, guid: 43d39bc3bbfe19049b6c6e1e8806efbb,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823672328600201764, guid: 43d39bc3bbfe19049b6c6e1e8806efbb,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -613904149
       objectReference: {fileID: 0}
     - target: {fileID: 8823672328600201767, guid: 43d39bc3bbfe19049b6c6e1e8806efbb,
         type: 3}
@@ -9630,6 +9675,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Eagle
       objectReference: {fileID: 0}
+    - target: {fileID: 8128384441712315608, guid: 6fa600ab89372114ca2775ce85b5dcdc,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8128384441712315609, guid: 6fa600ab89372114ca2775ce85b5dcdc,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8128384441712315609, guid: 6fa600ab89372114ca2775ce85b5dcdc,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -613904149
+      objectReference: {fileID: 0}
     - target: {fileID: 8128384441712315614, guid: 6fa600ab89372114ca2775ce85b5dcdc,
         type: 3}
       propertyPath: m_RootOrder
@@ -9777,6 +9837,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476526859987758561, guid: 91626adff3431e8428f7e89f37b1823f,
+        type: 3}
+      propertyPath: levelToLoad
+      value: Phuong
       objectReference: {fileID: 0}
     - target: {fileID: 7476526860905168853, guid: 91626adff3431e8428f7e89f37b1823f,
         type: 3}

@@ -2539,7 +2539,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800176460, guid: e6d963a793a240b4c9ccc8d298dcb81f, type: 3}
       propertyPath: levelToLoad
-      value: Ha
+      value: Quang
       objectReference: {fileID: 0}
     - target: {fileID: 6435672142319634244, guid: e6d963a793a240b4c9ccc8d298dcb81f,
         type: 3}
@@ -8262,7 +8262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800176460, guid: e6d963a793a240b4c9ccc8d298dcb81f, type: 3}
       propertyPath: levelToLoad
-      value: Quang
+      value: Ha
       objectReference: {fileID: 0}
     - target: {fileID: 6435672142319634244, guid: e6d963a793a240b4c9ccc8d298dcb81f,
         type: 3}
