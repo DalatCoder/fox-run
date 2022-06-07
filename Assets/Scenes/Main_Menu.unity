@@ -1129,8 +1129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05bd339a8fbf0de4cb30d0a36d011698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startScene: Level01
-  mainMenuScene: Main_Menu
+  startScene: Level Select
   aboutScene: About_Game
 --- !u!224 &1837110801 stripped
 RectTransform:
