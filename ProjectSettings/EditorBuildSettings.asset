@@ -23,4 +23,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Ha.unity
     guid: 105d2f00902c7ce41b9c7f34c417e435
+  - enabled: 1
+    path: Assets/Scenes/Levels/Phuong.unity
+    guid: 83336b805f030454db2ce745bd502c21
+  - enabled: 1
+    path: Assets/Scenes/Levels/Quang.unity
+    guid: a6bf1a1e337f9424a9fe96347a80f288
+  - enabled: 1
+    path: Assets/Scenes/Levels/Hieu.unity
+    guid: c164eff9b4aac3a4aa85193088ab8c3f
   m_configObjects: {}

@@ -27,7 +27,7 @@ public class Stompbox : MonoBehaviour
     {
         if (!other.CompareTag("Enemy")) return;
 
-        other.transform.parent.gameObject.SetActive(false);
+        other.gameObject.SetActive(false);
         Instantiate(deathEffect, other.transform.position, other.transform.rotation);
 
         PlayerController.instance.Bounce();
