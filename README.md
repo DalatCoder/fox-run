@@ -3656,3 +3656,7 @@ Cả 2 cùng di chuyển trong phương thức `update`, do đó lâu lâu `play
         transform.position = new Vector3(xPosition, yPosition, transform.position.z);
     }
 ```
+
+### 11.5. Loading Levels
+
+Tạo `script` `Level Select Manager` để quản lý việc `load level`
